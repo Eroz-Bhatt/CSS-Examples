@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luminous Absence - Normal Cursor</title>
+    
+    <!-- Font imports -->
+    <link href="https://fonts.googleapis.com/css2?family=Boldonse&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+          --primary-font: "Boldonse", sans-serif;
+          --secondary-font: "Bodoni Moda", serif;
+          --primary-color: #e0e0e0;
+          --quote-size: 8vw;
+          --author-size: 1vw;
+        }
+
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+
+        html, body {
+          width: 100%;
+          height: 100%;
+          overflow: hidden;
+          background-color: #111;
+          letter-spacing: -0.03em;
+          position: relative;
+          cursor: default; /* Normal cursor */
+        }
+
+        /* Background noise effect */
+        body::before {
+          content: "";
+          position: fixed;
+          top: -50%;
+          left: -50%;
+          width: 200%;
+          height: 200%;
+          background: transparent url("http://assets.iceable.com/img/noise-transparent.png") repeat 0 0;
+          background-size: 300px 300px;
+          animation: noise-animation 0.3s steps(5) infinite;
+          opacity: 1;
+          z-index: 100;
+          pointer-events: none;
+        }
+
+        @keyframes noise-animation {
+          0% { transform: translate(0, 0); }
+          10% { transform: translate(-2%, -3%); }
+          20% { transform: translate(-4%, 2%); }
+          30% { transform: translate(2%, -4%); }
+          40% { transform: translate(-2%, 5%); }
+          50% { transform: translate(-4%, 2%); }
+          60% { transform: translate(3%, 0); }
+          70% { transform: translate(0, 3%); }
+          80% { transform: translate(-3%, 0); }
+          90% { transform: translate(2%, 2%); }
+          100% { transform: translate(1%, 0); }
+        }
+
+        .content {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          z-index: 20;
+          padding: 20px;
+          text-align: center;
+          color: var(--primary-color);
+        }
+
+        .quote-container {
+          max-width: 90%;
+          overflow: hidden;
+        }
+
+        .quote {
+          font-family: var(--primary-font);
+          font-size: var(--quote-size);
+          line-height: 1.3;
+          font-weight: 400;
+          letter-spacing: -0.02em;
+          margin-bottom: 5vh;
+          opacity: 1;
+          text-transform: uppercase;
+        }
+
+        .author {
+          font-family: var(--secondary-font);
+          font-size: var(--author-size);
+          font-style: italic;
+          opacity: 0.7;
+          margin-top: 2vh;
+          margin-bottom: 2vh;
+        }
+
+        .caption {
+          font-family: var(--secondary-font);
+          font-size: var(--author-size);
+          margin-bottom: 2vh;
+        }
+
+        canvas {
+          display: block;
+          position: fixed !important;
+          top: 0 !important;
+          left: 0 !important;
+          width: 100vw !important;
+          height: 100vh !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          z-index: 2;
+          pointer-events: none;
+        }
+
+        .profile-card {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 16px;
+          max-width: 300px;
+          width: 100%;
+          position: fixed;
+          bottom: 16px;
+          left: 16px;
+          z-index: 999;
+          color: var(--primary-color);
+        }
+
+        .profile-image {
+          flex-shrink: 0;
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+
+        .profile-info {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+        }
+
+        .profile-name {
+          font-size: 14px;
+          font-weight: 500;
+        }
+
+        .profile-twitter {
+          font-size: 12px;
+          color: #71717a;
+        }
+
+        .profile-twitter a {
+          text-decoration: none;
+          color: inherit;
+        }
+
+        .profile-twitter a:hover {
+          text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+      <div class="quote-container">
+        <div class="caption">Fragments of stardust, scattered across time.</div>
+        <div class="quote">Luminous absence</div>
+        <div class="author">The light reveals what darkness conceals, but never explains</div>
+      </div>
+    </div>
+
+    <div class="profile-card">
+      <img class="profile-image" src="https://filip-zrnzevic-portfolio-2025-v3.vercel.app/_next/image?url=%2Fimages%2Fprofile003.jpg&w=48&q=75" alt="Filip Zrnzević">
+      <div class="profile-info">
+        <p class="profile-name">Filip Zrnzević</p>
+        <p class="profile-twitter">
+          <a href="https://x.com/filipz" target="_blank">@filipz</a>
+        </p>
+      </div>
+    </div>
+
+    <script type="module">
+        import * as THREE from "https://esm.sh/three@0.175.0";
+
+        // Color palettes
+        const colorPalettes = {
+          fire: {
+            primary: [1.0, 0.3, 0.0],
+            secondary: [1.0, 0.6, 0.2]
+          }
+        };
+
+        // Settings
+        const settings = {
+          intensity: 1.09,
+          streakLength: 48,
+          streakHeight: 0.23,
+          glowPower: 2.75,
+          flareSize: 1.52,
+          flareSpeed: 1.0,
+          colorIntensity: 0.5,
+          colorScheme: "fire",
+          saturation: 2.0
+        };
+
+        // Initialize Three.js
+        const scene = new THREE.Scene();
+        const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
+        camera.position.z = 1;
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Mouse tracking
+        const mouse = new THREE.Vector2(0.5, 0.5);
+
+        // Shader code (same as original)
+        const vertexShader = `
+              varying vec2 vUv;
+              void main() {
+                vUv = uv;
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+              }
+            `;
+
+        const fragmentShader = `
+              uniform vec2 iResolution;
+              uniform float iTime;
+              uniform vec2 iMouse;
+              uniform float intensity;
+              uniform float streakLength;
+              uniform float streakHeight;
+              uniform float glowPower;
+              uniform float flareSize;
+              uniform float colorIntensity;
+              uniform vec3 primaryColor;
+              uniform vec3 secondaryColor;
+              uniform float saturation;
+              varying vec2 vUv;
+              
+              float InterleavedGradientNoise(vec2 uv) {
+                const vec3 magic = vec3(0.06711056, 0.00583715, 52.9829189);
+                return fract(magic.z * fract(dot(uv, magic.xy)));
+              }
+              
+              float Interglow(in vec2 uv, in vec2 pos, in vec3 flex, in float power) {
+                vec2 uvd = uv * (length(uv)) * flex.xy;
+                float edge = (1.0 / (1.0 + flex.z * pow(length(uvd - pos), power)));
+                return clamp(edge, 0.0, 1.0);
+              }
+              
+              vec3 adjustSaturation(vec3 color, float saturation) {
+                float luminance = dot(color, vec3(0.299, 0.587, 0.114));
+                return mix(vec3(luminance), color, saturation);
+              }
+              
+              void main() {
+                vec2 uv = vUv;
+                vec2 fragCoord = vUv * iResolution;
+                vec2 mm = iMouse;
+                float inz = InterleavedGradientNoise(fragCoord);
+                float ano_clampW = streakLength;
+                float ano_clampH = streakHeight;
+                vec3 baseColor = vec3(1.0, 1.0, 1.0);
+                vec3 outcol = vec3(0.0, 0.0, 0.0);
+                
+                {
+                  const vec2 A = sin(vec2(0.0, 2.2));
+                  const mat2 Ar = mat2(A, -A.y, A.x);
+                  vec2 U = uv;
+                  U -= mm.xy;
+                  U = (abs(U * Ar) * mat2(0.0, 0.0, ano_clampW, ano_clampH));
+                  float lfStreak = 0.15 / max(U.x, U.y);
+                  float fadein = smoothstep(0.8, 1.0, 1.0 - (length(vec2(0.5, 0.5) - mm) * 2.0 * flareSize));
+                  float xt = smoothstep(0.0, 1.1, lfStreak);
+                  outcol = baseColor * xt * (fadein * fadein * 2.0 * intensity);
+                }
+                
+                float xr1 = Interglow(vec2(-0.5, -0.5) + uv, uv - mm, vec3(2.2, 1.5, 24.0 + inz), 1.25);
+                float xr2 = Interglow(vec2(-0.45, -0.55) + uv, uv - mm, vec3(4.2, 2.2, 28.0 + inz), 1.5);
+                float xr3 = Interglow(vec2(-0.53, -0.46) + uv, uv - mm, vec3(1.4, 4.6, 16.0 + inz), 1.1);
+                
+                outcol += baseColor * xr1 * xr1 * colorIntensity;
+                outcol += baseColor * xr2 * colorIntensity * 0.7;
+                outcol += baseColor * pow(xr3 + (inz * 0.3335), glowPower) * colorIntensity;
+                
+                outcol *= primaryColor;
+                outcol = adjustSaturation(outcol, saturation);
+                outcol = clamp(outcol, 0.0, 1.0);
+                
+                gl_FragColor = vec4(outcol, outcol.r + outcol.g + outcol.b);
+              }
+            `;
+
+        // Initialize uniforms
+        const uniforms = {
+          iResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+          iTime: { value: 0 },
+          iMouse: { value: new THREE.Vector2(0.5, 0.5) },
+          intensity: { value: settings.intensity },
+          streakLength: { value: settings.streakLength },
+          streakHeight: { value: settings.streakHeight },
+          glowPower: { value: settings.glowPower },
+          flareSize: { value: settings.flareSize },
+          colorIntensity: { value: settings.colorIntensity },
+          primaryColor: { value: new THREE.Vector3(1.0, 0.3, 0.0) },
+          secondaryColor: { value: new THREE.Vector3(1.0, 0.6, 0.2) },
+          saturation: { value: settings.saturation }
+        };
+
+        // Create material and geometry
+        const geometry = new THREE.PlaneGeometry(2, 2);
+        const material = new THREE.ShaderMaterial({
+          vertexShader,
+          fragmentShader,
+          uniforms,
+          transparent: true
+        });
+
+        const plane = new THREE.Mesh(geometry, material);
+        scene.add(plane);
+
+        // Handle mouse movement
+        document.addEventListener("mousemove", (e) => {
+          mouse.x = e.clientX / window.innerWidth;
+          mouse.y = 1.0 - e.clientY / window.innerHeight;
+        });
+
+        // Handle window resize
+        window.addEventListener("resize", () => {
+          const width = window.innerWidth;
+          const height = window.innerHeight;
+          renderer.setSize(width, height);
+          uniforms.iResolution.value.set(width, height);
+        });
+
+        // Animation loop
+        function animate() {
+          requestAnimationFrame(animate);
+          uniforms.iTime.value += 0.01 * settings.flareSpeed;
+          uniforms.iMouse.value.set(mouse.x, mouse.y);
+          renderer.render(scene, camera);
+        }
+
+        animate();
+    </script>
+</body>
+</html>

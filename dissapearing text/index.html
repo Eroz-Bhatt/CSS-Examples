@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>NOSH Animation</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap');
+
+      body {
+        height: 100vh;
+        font-family: 'Poppins', sans-serif;
+        overflow: hidden;
+        background: black;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .nosh {
+        position: relative;
+        display: flex;
+        justify-content: center;
+      }
+
+      .nosh span {
+        display: inline-block;
+        color: #900c0c;
+        text-shadow: 0 0 15px rgba(144, 12, 12, 0.5);
+        animation-duration: 6s;
+        animation-iteration-count: infinite;
+        font-size: 18vw;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        position: relative;
+        opacity: 0;
+        transform: translateY(-100%);
+      }
+
+      .nosh span:nth-child(1) {
+        animation-name: letter-anim-1;
+      }
+
+      .nosh span:nth-child(2) {
+        animation-name: letter-anim-2;
+      }
+
+      .nosh span:nth-child(3) {
+        animation-name: letter-anim-3;
+      }
+
+      .nosh span:nth-child(4) {
+        animation-name: letter-anim-4;
+      }
+
+      /* Keyframe animations for each letter */
+      @keyframes letter-anim-1 {
+        0%,
+        5% {
+          opacity: 0;
+          transform: translateY(-100%);
+        }
+        8%,
+        20% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        30%,
+        70% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        73%,
+        100% {
+          opacity: 0;
+          transform: translateY(100%);
+        }
+      }
+
+      @keyframes letter-anim-2 {
+        0%,
+        10% {
+          opacity: 0;
+          transform: translateY(-100%);
+        }
+        13%,
+        25% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        30%,
+        70% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        73%,
+        100% {
+          opacity: 0;
+          transform: translateY(100%);
+        }
+      }
+
+      @keyframes letter-anim-3 {
+        0%,
+        15% {
+          opacity: 0;
+          transform: translateY(-100%);
+        }
+        18%,
+        30% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        30%,
+        70% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        73%,
+        100% {
+          opacity: 0;
+          transform: translateY(100%);
+        }
+      }
+
+      @keyframes letter-anim-4 {
+        0%,
+        20% {
+          opacity: 0;
+          transform: translateY(-100%);
+        }
+        23%,
+        35% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        35%,
+        70% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        73%,
+        100% {
+          opacity: 0;
+          transform: translateY(100%);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="nosh">
+      <span>N</span><span>O</span><span>S</span><span>H</span>
+    </div>
+  </body>
+</html>

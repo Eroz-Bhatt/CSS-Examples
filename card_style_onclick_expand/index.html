@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Cards – Victor of Valencia</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      height:100vh;
+      font-family:'Roboto',sans-serif;
+      background:#111;
+      color:#fff;
+      overflow:hidden;
+    }
+    .options{
+      display:flex;
+      width:calc(100% - 100px);
+      max-width:900px;
+      min-width:600px;
+      height:400px;
+    }
+    .option{
+      position:relative;
+      overflow:hidden;
+      margin:10px;
+      min-width:60px;
+      flex:1;
+      border-radius:30px;
+      background:var(--optionBackground) center/cover;
+      cursor:pointer;
+      transition:.5s cubic-bezier(.05,.61,.41,.95);
+    }
+    .option:nth-child(1){--defaultBackground:#ED5565}
+    .option:nth-child(2){--defaultBackground:#FC6E51}
+    .option:nth-child(3){--defaultBackground:#FFCE54}
+    .option:nth-child(4){--defaultBackground:#2ECC71}
+    .option:nth-child(5){--defaultBackground:#5D9CEC}
+
+    .option.active{
+      flex-grow:10000;
+      max-width:600px;
+      margin:0;
+      border-radius:40px;
+      background-size:auto 100%;
+    }
+    .shadow{
+      position:absolute;
+      bottom:0;left:0;right:0;
+      height:120px;
+      background:linear-gradient(to top,transparent,#0006);
+      transition:.5s;
+    }
+    .option:not(.active) .shadow{
+      height:80px;
+    }
+    .label{
+      position:absolute;
+      bottom:10px;
+      left:10px;
+      display:flex;
+      align-items:center;
+      transition:.5s;
+    }
+    .option.active .label{
+      bottom:20px;
+      left:20px;
+    }
+    .icon{
+      width:40px;height:40px;
+      background:#fff;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:var(--defaultBackground);
+      font-size:1.1rem;
+    }
+    .info{
+      margin-left:10px;
+      color:#fff;
+      white-space:nowrap;
+    }
+    .main{font-weight:bold;font-size:1.2rem}
+    .sub{opacity:.7;font-size:.9rem}
+    .option:not(.active) .info>div{opacity:0;transform:translateX(20px)}
+    .option.active   .info>div{opacity:1;transform:translateX(0)}
+  </style>
+</head>
+<body>
+
+<div class="options">
+  <div class="option active" style="--optionBackground:url(https://66.media.tumblr.com/6fb397d822f4f9f4596dff2085b18f2e/tumblr_nzsvb4p6xS1qho82wo1_1280.jpg)">
+    <div class="shadow"></div>
+    <div class="label">
+      <div class="icon"><i class="fas fa-walking"></i></div>
+      <div class="info">
+        <div class="main">Blonkisoaz</div>
+        <div class="sub">Omuke trughte a otufta</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" style="--optionBackground:url(https://66.media.tumblr.com/8b69cdde47aa952e4176b4200052abf4/tumblr_o51p7mFFF21qho82wo1_1280.jpg)">
+    <div class="shadow"></div>
+    <div class="label">
+      <div class="icon"><i class="fas fa-snowflake"></i></div>
+      <div class="info">
+        <div class="main">Oretemauw</div>
+        <div class="sub">Omuke trughte a otufta</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" style="--optionBackground:url(https://66.media.tumblr.com/5af3f8303456e376ceda1517553ba786/tumblr_o4986gakjh1qho82wo1_1280.jpg)">
+    <div class="shadow"></div>
+    <div class="label">
+      <div class="icon"><i class="fas fa-tree"></i></div>
+      <div class="info">
+        <div class="main">Iteresuselle</div>
+        <div class="sub">Omuke trughte a otufta</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" style="--optionBackground:url(https://66.media.tumblr.com/5516a22e0cdacaa85311ec3f8fd1e9ef/tumblr_o45jwvdsL11qho82wo1_1280.jpg)">
+    <div class="shadow"></div>
+    <div class="label">
+      <div class="icon"><i class="fas fa-tint"></i></div>
+      <div class="info">
+        <div class="main">Idiefe</div>
+        <div class="sub">Omuke trughte a otufta</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" style="--optionBackground:url(https://66.media.tumblr.com/f19901f50b79604839ca761cd6d74748/tumblr_o65rohhkQL1qho82wo1_1280.jpg)">
+    <div class="shadow"></div>
+    <div class="label">
+      <div class="icon"><i class="fas fa-sun"></i></div>
+      <div class="info">
+        <div class="main">Inatethi</div>
+        <div class="sub">Omuke trughte a otufta</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $('.option').on('click', function () {
+    $('.option').removeClass('active');
+    $(this).addClass('active');
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NOSH - Culinary Kitchen</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: #000;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        font-family: 'Barlow Condensed', sans-serif;
+      }
+
+      #container {
+        position: relative;
+        width: 100%;
+        max-width: 1200px;
+        text-align: center;
+        padding: 20px;
+        z-index: 10;
+      }
+
+      #content {
+        position: relative;
+        margin-bottom: 40px;
+      }
+
+      #content h1 {
+        display: inline-block;
+        position: relative;
+        margin: 0 5px;
+        font-size: 18vw;
+        font-weight: 700;
+        color: #900c0c;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        -webkit-text-stroke-width: 0.1vw;
+        -webkit-text-stroke-color: rgba(255, 255, 255, 0.3);
+        animation-iteration-count: infinite;
+        animation-fill-mode: forwards;
+      }
+
+      .subtitle {
+        color: #aaa;
+        font-size: 1.5rem;
+        letter-spacing: 8px;
+        margin-top: 20px;
+        text-transform: uppercase;
+        font-weight: 400;
+        position: relative;
+        z-index: 10;
+      }
+
+      /* Animation Keyframes with Red Gradient Glow */
+      @keyframes flickerN {
+        0%,
+        22.22% {
+          color: #900c0c;
+          text-shadow: none;
+        }
+        24% {
+          color: rgba(255, 50, 50, 0.7);
+          text-shadow: 0 0 15px rgba(255, 0, 0, 0.8),
+            0 0 30px rgba(200, 0, 0, 0.7);
+        }
+        24.02% {
+          color: #900c0c;
+          text-shadow: none;
+        }
+        25.8% {
+          color: rgba(255, 50, 50, 0.7);
+          text-shadow: 0 0 15px rgba(255, 0, 0, 0.8),
+            0 0 30px rgba(200, 0, 0, 0.7);
+        }
+        25.82% {
+          color: #900c0c;
+          text-shadow: none;
+        }
+        27.6% {
+          color: rgba(255, 50, 50, 0.7);
+          text-shadow: 0 0 15px rgba(255, 0, 0, 0.8),
+            0 0 30px rgba(200, 0, 0, 0.7);
+        }
+        27.62% {
+          color: #900c0c;
+          text-shadow: none;
+        }
+        29.4% {
+          color: rgba(255, 50, 50, 0.7);
+          text-shadow: 0 0 15px rgba(255, 0, 0, 0.8),
+            0 0 30px rgba(200, 0, 0, 0.7);
+        }
+        100% {
+          color: rgba(255, 50, 50, 0.7);
+          text-shadow: 0 0 15px rgba(255, 0, 0, 0.8),
+            0 0 30px rgba(200, 0, 0, 0.7);
+        }
+      }
+
+      @keyframes flickerO {
+        0%,
+        22.22% {
+          color: #900c0c;
+          text-shadow: none;
+        }
+        24% {
+          color: rgba(255, 50, 50, 0.7);
+          text-shadow: 0 0 15px rgba(255, 0, 0, 0.8),
+            0 0 30px rgba(200, 0, 0, 0.7);
+        }
+        24.02% {
+          color: #900c0c;
+          text-shadow: none;
+        }
+        25.8% {
+          color: rgba(255, 50, 50, 0.7);
+          text-shadow: 0 0 15px rgba(255, 0, 0, 0.8),
+            0 0 30px rgba(200, 0, 0, 0.7);
+        }
+        25.82% {
+          color: #900c0c;
+          text-shadow: none;
+        }
+        27.6% {
+          color: rgba(255, 50, 50, 0.7);
+          text-shadow: 0 0 15px rgba(255, 0, 0, 0.8),
+            0 0 30px rgba(200, 0, 0, 0.7);
+        }
+        27.62% {
+          color: #900c0c;
+          text-shadow: none;
+        }
+        29.4% {
+          color: rgba(255, 50, 50, 0.7);
+          text-shadow: 0 0 15px rgba(255, 0, 0, 0.8),
+            0 0 30px rgba(200, 0, 0, 0.7);
+        }
+        72.67% {
+          color: rgba(255, 255, 255, 0.9);
+          text-shadow: 0 0 50px rgba(255, 0, 0, 1),
+            0 0 80px rgba(200, 0, 0, 0.9), 0 0 120px rgba(150, 0, 0, 0.8);
+        }
+        73.33% {
+          color: #900c0c;
+          text-shadow: none;
+        }
+        74% {
+          color: rgba(255, 255, 255, 0.9);
+          text-shadow: 0 0 50px rgba(255, 0, 0, 1),
+            0 0 80px rgba(200, 0, 0, 0.9), 0 0 120px rgba(150, 0, 0, 0.8);
+        }
+        74.67% {
+          color: #900c0c;
+          text-shadow: none;
+        }
+        75.33% {
+          color: rgba(255, 255, 255, 0.9);
+          text-shadow: 0 0 50px rgba(255, 0, 0, 1),
+            0 0 80px rgba(200, 0, 0, 0.9), 0 0 120px rgba(150, 0, 0, 0.8);
+        }
+        75.78% {
+          color: #900c0c;
+          text-shadow: none;
+        }
+        94.44%,
+        100% {
+          color: #900c0c;
+          text-shadow: none;
+        }
+      }
+
+      @keyframes flickerS {
+        0%,
+        22.22% {
+          color: #900c0c;
+          text-shadow: none;
+        }
+        24% {
+          color: rgba(255, 50, 50, 0.7);
+          text-shadow: 0 0 15px rgba(255, 0, 0, 0.8),
+            0 0 30px rgba(200, 0, 0, 0.7);
+        }
+        24.02% {
+          color: #900c0c;
+          text-shadow: none;
+        }
+        25.8% {
+          color: rgba(255, 50, 50, 0.7);
+          text-shadow: 0 0 15px rgba(255, 0, 0, 0.8),
+            0 0 30px rgba(200, 0, 0, 0.7);
+        }
+        25.82% {
+          color: #900c0c;
+          text-shadow: none;
+        }
+        27.6% {
+          color: rgba(255, 50, 50, 0.7);
+          text-shadow: 0 0 15px rgba(255, 0, 0, 0.8),
+            0 0 30px rgba(200, 0, 0, 0.7);
+        }
+        27.62% {
+          color: #900c0c;
+          text-shadow: none;
+        }
+        29.4% {
+          color: rgba(255, 50, 50, 0.7);
+          text-shadow: 0 0 15px rgba(255, 0, 0, 0.8),
+            0 0 30px rgba(200, 0, 0, 0.7);
+        }
+        88.87% {
+          color: rgba(255, 50, 50, 0.7);
+          text-shadow: 0 0 15px rgba(255, 0, 0, 0.8),
+            0 0 30px rgba(200, 0, 0, 0.7);
+        }
+        88.89%,
+        100% {
+          color: #900c0c;
+          text-shadow: none;
+        }
+      }
+
+      @keyframes flickerH {
+        0%,
+        22.22% {
+          color: #900c0c;
+          text-shadow: none;
+        }
+        24% {
+          color: rgba(255, 50, 50, 0.7);
+          text-shadow: 0 0 15px rgba(255, 0, 0, 0.8),
+            0 0 30px rgba(200, 0, 0, 0.7);
+        }
+        24.02% {
+          color: #900c0c;
+          text-shadow: none;
+        }
+        25.8% {
+          color: rgba(255, 50, 50, 0.7);
+          text-shadow: 0 0 15px rgba(255, 0, 0, 0.8),
+            0 0 30px rgba(200, 0, 0, 0.7);
+        }
+        25.82% {
+          color: #900c0c;
+          text-shadow: none;
+        }
+        27.6% {
+          color: rgba(255, 50, 50, 0.7);
+          text-shadow: 0 0 15px rgba(255, 0, 0, 0.8),
+            0 0 30px rgba(200, 0, 0, 0.7);
+        }
+        27.62% {
+          color: #900c0c;
+          text-shadow: none;
+        }
+        29.4% {
+          color: rgba(255, 50, 50, 0.7);
+          text-shadow: 0 0 15px rgba(255, 0, 0, 0.8),
+            0 0 30px rgba(200, 0, 0, 0.7);
+        }
+        83.31% {
+          color: rgba(255, 50, 50, 0.7);
+          text-shadow: 0 0 15px rgba(255, 0, 0, 0.8),
+            0 0 30px rgba(200, 0, 0, 0.7);
+        }
+        83.33%,
+        100% {
+          color: #900c0c;
+          text-shadow: none;
+        }
+      }
+
+      #content h1:nth-child(1) {
+        animation: flickerN 4.5s infinite forwards;
+      }
+      #content h1:nth-child(2) {
+        animation: flickerO 4.5s infinite forwards 0.25s;
+      }
+      #content h1:nth-child(3) {
+        animation: flickerS 4.5s infinite forwards 0.5s;
+      }
+      #content h1:nth-child(4) {
+        animation: flickerH 4.5s infinite forwards 0.75s;
+      }
+
+      /* Background elements */
+      .glow-effect {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 80vw;
+        height: 80vw;
+        max-width: 800px;
+        max-height: 800px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(144, 12, 12, 0.15) 0%,
+          rgba(0, 0, 0, 0) 70%
+        );
+        z-index: 1;
+      }
+
+      .light-beam {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 5px;
+        height: 100%;
+        background: linear-gradient(
+          to bottom,
+          rgba(144, 12, 12, 0) 0%,
+          rgba(144, 12, 12, 0.3) 30%,
+          rgba(144, 12, 12, 0.1) 70%,
+          rgba(144, 12, 12, 0) 100%
+        );
+        z-index: 2;
+      }
+
+      .light-beam:nth-child(2) {
+        transform: translateX(-50%) rotate(30deg);
+      }
+      .light-beam:nth-child(3) {
+        transform: translateX(-50%) rotate(60deg);
+      }
+      .light-beam:nth-child(4) {
+        transform: translateX(-50%) rotate(90deg);
+      }
+      .light-beam:nth-child(5) {
+        transform: translateX(-50%) rotate(120deg);
+      }
+      .light-beam:nth-child(6) {
+        transform: translateX(-50%) rotate(150deg);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="glow-effect"></div>
+    <
+
+    <div id="container">
+      <div id="content">
+        <h1>N</h1>
+        <h1>O</h1>
+        <h1>S</h1>
+        <h1>H</h1>
+      </div>
+      <div class="subtitle">A CULINARY KITCHEN</div>
+    </div>
+
+    <script>
+      // Add subtle pulsing effect to the glow
+      document.addEventListener('DOMContentLoaded', () => {
+        const glow = document.querySelector('.glow-effect');
+        let scale = 1;
+        let direction = 0.002;
+
+        function pulse() {
+          scale += direction;
+          if (scale > 1.05 || scale < 0.95) direction *= -1;
+
+          glow.style.transform = `translate(-50%, -50%) scale(${scale})`;
+          requestAnimationFrame(pulse);
+        }
+
+        pulse();
+      });
+    </script>
+  </body>
+</html>

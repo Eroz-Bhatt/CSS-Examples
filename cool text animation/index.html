@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NOSH - A Culinary Kitchen</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css?family=Cairo');
+      body {
+        background-color: #010;
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      .title {
+        font-family: 'Cairo', sans-serif;
+        text-align: center;
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        letter-spacing: 1px;
+        line-height: 1.5;
+        position: relative;
+      }
+
+      h1 {
+        background-image: url(https://media.giphy.com/media/26BROrSHlmyzzHf3i/giphy.gif);
+        background-size: cover;
+        color: transparent;
+        -moz-background-clip: text;
+        -webkit-background-clip: text;
+        text-transform: uppercase;
+        font-size: 120px;
+        margin: 10px 0;
+      }
+
+      .subtitle {
+        color: #fff;
+        font-family: 'Cairo', sans-serif;
+        font-size: 32px;
+        margin-top: -15px;
+        letter-spacing: 3px;
+        text-transform: lowercase;
+      }
+
+      .white-mode {
+        text-decoration: none;
+        padding: 7px 10px;
+        background-color: #122;
+        border-radius: 3px;
+        color: #fff;
+        transition: 0.35s ease-in-out;
+        position: absolute;
+        left: 15px;
+        bottom: 15px;
+        font-family: 'Montserrat', sans-serif;
+      }
+
+      .white-mode:hover {
+        background-color: #fff;
+        color: #122;
+      }
+
+      @media (max-width: 768px) {
+        h1 {
+          font-size: 80px;
+        }
+        .subtitle {
+          font-size: 24px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        h1 {
+          font-size: 60px;
+        }
+        .subtitle {
+          font-size: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="title">
+      <h1>NOSH</h1>
+      <div class="subtitle">a culinary kitchen</div>
+    </div>
+  </body>
+</html>

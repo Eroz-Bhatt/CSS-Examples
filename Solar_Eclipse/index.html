@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Solar Eclipse Animation</title>
+    <style>
+      /* Keyframes for the eclipse animation */
+      @keyframes cresent {
+        /* Initial position: moon is below and to the left */
+        0% {
+          transform: translate(-30px, 30px) scale(0.9);
+          box-shadow: none; /* No shadow at start */
+        }
+        /* Midpoint: moon is centered and at maximum eclipse effect */
+        50% {
+          transform: translate(0px, 0px) scale(1.02); /* Slightly enlarged */
+          box-shadow: 0 0 10px #fef3f1,
+            /* Inner glow - lightened moon color */ 0 0 80px 8px #c7938b; /* Outer glow - moon color */
+          background-color: #efdbd8; /* Peak eclipse color */
+        }
+        /* Final position: moon is above and to the right */
+        100% {
+          transform: translate(30px, -30px) scale(0.9);
+          box-shadow: none; /* Shadow disappears */
+        }
+      }
+
+      /* Global box-sizing reset */
+      html {
+        box-sizing: border-box;
+      }
+
+      /* Apply box-sizing to all elements and pseudo-elements */
+      *,
+      *::after,
+      *::before {
+        box-sizing: inherit;
+      }
+
+      /* Set the html and body to full viewport height */
+      html,
+      body {
+        height: 100%;
+      }
+
+      /* Body styling - creates the starry background */
+      body {
+        display: flex;
+        justify-content: center; /* Center horizontally */
+        align-items: center; /* Center vertically */
+        background-image: linear-gradient(
+          30deg,
+          #182c51,
+          #0a1123
+        ); /* Deep blue gradient background */
+        overflow: hidden; /* Prevent scrolling */
+      }
+
+      /* The moon element - acts as the "occluder" during the eclipse */
+      .moon {
+        /* Gradient for the moon's surface */
+        background-image: linear-gradient(30deg, #152448, #121d3b);
+        width: 256px;
+        height: 256px;
+        border-radius: 50%; /* Perfect circle */
+        position: relative; /* Needed for positioning the pseudo-element */
+      }
+
+      /* Pseudo-element creates the animated eclipse effect */
+      .moon::before {
+        content: ''; /* Required for pseudo-elements */
+        background-color: #c7938b; /* Base moon color */
+        position: absolute;
+        display: block;
+        height: 100%;
+        width: 100%;
+        border-radius: 50%; /* Circular shape */
+        z-index: -1; /* Place behind the .moon element */
+
+        /* Apply the eclipse animation */
+        animation: 3.2s /* Duration */ cresent /* Keyframe name */ linear
+          /* Timing function */ infinite /* Repeat forever */ alternate; /* Play forward then backward */
+      }
+
+      /* Responsive styles for smaller screens */
+      @media (max-width: 768px) {
+        .moon {
+          width: 160px;
+          height: 160px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- The moon element - container for the eclipse animation -->
+    <div class="moon"></div>
+  </body>
+</html>

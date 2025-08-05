@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Eclipx // Zero-Dependency Demo</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root{
+  --bg:#05060f;
+  --accent:#9dc3f7;
+  --gold:#d8bd10;
+  --ease:cubic-bezier(.4,0,.2,1);
+  font-size:clamp(10px,1.3vw,18px);
+}
+*{box-sizing:border-box;margin:0}
+body{
+  height:100vh;
+  overflow-x:hidden;
+  background:var(--bg);
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  color:#fff;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  transition:.6s var(--ease);
+}
+/* --- Toggle Theme --- */
+.theme-toggle{
+  position:fixed;
+  top:1rem;right:1rem;
+  width:2.5rem;height:2.5rem;
+  border-radius:50%;
+  border:2px solid var(--accent);
+  cursor:pointer;
+  background:transparent;
+  transition:.4s;
+  z-index:999;
+}
+.theme-toggle:hover{transform:scale(1.1)}
+body.gold{
+  filter:invert(1) hue-rotate(30deg) brightness(1.4);
+}
+body.gold .theme-toggle{border-color:var(--gold)}
+/* --- Hero --- */
+.hero{
+  text-align:center;
+  perspective:1000px;
+}
+.hero h1{
+  font-size:clamp(3rem,12vw,10rem);
+  font-weight:800;
+  letter-spacing:-.05em;
+  background:linear-gradient(135deg,var(--accent),#fff);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  animation:float 6s ease-in-out infinite;
+}
+@keyframes float{
+  0%,100%{transform:translateY(0) rotateX(0)}
+  50%{transform:translateY(-15px) rotateX(10deg)}
+}
+.tagline{
+  margin-top:.5rem;
+  font-size:clamp(.9rem,2vw,1.25rem);
+  color:#d8ecf8be;
+}
+/* --- Particles (pure CSS) --- */
+.particles{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+  z-index:-1;
+}
+.particles span{
+  position:absolute;
+  width:2px;height:2px;
+  background:#fff;
+  border-radius:50%;
+  opacity:.6;
+  animation:fall linear infinite;
+}
+@keyframes fall{
+  to{transform:translateY(110vh) scale(.5)}
+}
+/* --- CTA --- */
+.cta{
+  margin-top:3rem;
+  padding:.9rem 2.4rem;
+  border-radius:2rem;
+  border:1px solid var(--accent);
+  background:transparent;
+  color:var(--accent);
+  font-size:1rem;
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+  transition:.4s var(--ease);
+}
+.cta::before{
+  content:'';
+  position:absolute;
+  inset:-50%;
+  background:conic-gradient(var(--accent),transparent,var(--accent));
+  animation:spin 4s linear infinite;
+  z-index:-1;
+  opacity:.2;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.cta:hover{
+  color:var(--bg);
+  background:var(--accent);
+}
+/* --- Responsive --- */
+@media(max-width:600px){
+  .tagline br{display:none}
+}
+</style>
+</head>
+<body>
+<button class="theme-toggle" title="Toggle theme"></button>
+
+<div class="particles" id="particles"></div>
+
+<main class="hero">
+  <h1>Eclipx</h1>
+  <p class="tagline">
+    The world’s best platform,<br />powered by EclipxOS + React.
+  </p>
+  <button class="cta">Get Started</button>
+</main>
+
+<script>
+/* --- CSS-only particles --- */
+const container=document.getElementById('particles');
+const COUNT=60;
+for(let i=0;i<COUNT;i++){
+  const dot=document.createElement('span');
+  dot.style.left=Math.random()*100+'vw';
+  dot.style.animationDuration=(Math.random()*6+4)+'s';
+  dot.style.animationDelay=Math.random()*6+'s';
+  dot.style.opacity=Math.random()*.7;
+  container.appendChild(dot);
+}
+
+/* --- Theme toggle --- */
+document.querySelector('.theme-toggle').addEventListener('click',()=>{
+  document.body.classList.toggle('gold');
+});
+</script>
+</body>
+</html>

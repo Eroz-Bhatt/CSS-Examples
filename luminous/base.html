@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luminous Absence - Static</title>
+    
+    <!-- Font imports -->
+    <link href="https://fonts.googleapis.com/css2?family=Boldonse&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+          --primary-font: "Boldonse", sans-serif;
+          --secondary-font: "Bodoni Moda", serif;
+          --primary-color: #e0e0e0;
+          --quote-size: 8vw;
+          --author-size: 1vw;
+        }
+
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+
+        html, body {
+          width: 100%;
+          height: 100%;
+          overflow: hidden;
+          background-color: #111;
+          letter-spacing: -0.03em;
+          position: relative;
+        }
+
+        /* Background noise effect */
+        body::before {
+          content: "";
+          position: fixed;
+          top: -50%;
+          left: -50%;
+          width: 200%;
+          height: 200%;
+          background: transparent url("http://assets.iceable.com/img/noise-transparent.png") repeat 0 0;
+          background-size: 300px 300px;
+          animation: noise-animation 0.3s steps(5) infinite;
+          opacity: 1;
+          z-index: 100;
+          pointer-events: none;
+        }
+
+        @keyframes noise-animation {
+          0% { transform: translate(0, 0); }
+          10% { transform: translate(-2%, -3%); }
+          20% { transform: translate(-4%, 2%); }
+          30% { transform: translate(2%, -4%); }
+          40% { transform: translate(-2%, 5%); }
+          50% { transform: translate(-4%, 2%); }
+          60% { transform: translate(3%, 0); }
+          70% { transform: translate(0, 3%); }
+          80% { transform: translate(-3%, 0); }
+          90% { transform: translate(2%, 2%); }
+          100% { transform: translate(1%, 0); }
+        }
+
+        .content {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          z-index: 20;
+          padding: 20px;
+          text-align: center;
+          color: var(--primary-color);
+        }
+
+        .quote-container {
+          max-width: 90%;
+          overflow: hidden;
+        }
+
+        .quote {
+          font-family: var(--primary-font);
+          font-size: var(--quote-size);
+          line-height: 1.3;
+          font-weight: 400;
+          letter-spacing: -0.02em;
+          margin-bottom: 5vh;
+          opacity: 1;
+          text-transform: uppercase;
+        }
+
+        .author {
+          font-family: var(--secondary-font);
+          font-size: var(--author-size);
+          font-style: italic;
+          opacity: 0.7;
+          margin-top: 2vh;
+          margin-bottom: 2vh;
+        }
+
+        .caption {
+          font-family: var(--secondary-font);
+          font-size: var(--author-size);
+          margin-bottom: 2vh;
+        }
+
+        .profile-card {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 16px;
+          max-width: 300px;
+          width: 100%;
+          position: fixed;
+          bottom: 16px;
+          left: 16px;
+          z-index: 999;
+          color: var(--primary-color);
+        }
+
+        .profile-image {
+          flex-shrink: 0;
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+
+        .profile-info {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+        }
+
+        .profile-name {
+          font-size: 14px;
+          font-weight: 500;
+        }
+
+        .profile-twitter {
+          font-size: 12px;
+          color: #71717a;
+        }
+
+        .profile-twitter a {
+          text-decoration: none;
+          color: inherit;
+        }
+
+        .profile-twitter a:hover {
+          text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+      <div class="quote-container">
+        <div class="caption">Fragments of stardust, scattered across time.</div>
+        <div class="quote">Luminous absence</div>
+        <div class="author">The light reveals what darkness conceals, but never explains</div>
+      </div>
+    </div>
+
+    <div class="profile-card">
+      <img class="profile-image" src="https://filip-zrnzevic-portfolio-2025-v3.vercel.app/_next/image?url=%2Fimages%2Fprofile003.jpg&w=48&q=75" alt="Filip Zrnzević">
+      <div class="profile-info">
+        <p class="profile-name">Filip Zrnzević</p>
+        <p class="profile-twitter">
+          <a href="https://x.com/filipz" target="_blank">@filipz</a>
+        </p>
+      </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Radar Cards</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DotGothic16&family=Flow+Block&display=swap');
+    
+    @font-face {
+      font-family: 'Tiny5';
+      src: url('https://fonts.googleapis.com/css2?family=Tiny5&display=swap');
+    }
+    
+    @font-face {
+      font-family: 'Digital-7 Mono';
+      src: url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
+    }
+
+    :root {
+      --gibbgrad: repeating-linear-gradient(90deg,
+        currentColor 0 3ex,
+        #fff0 0 4ex,
+        currentColor 0 5ex,
+        #fff0 0 6ex,
+        currentColor 0 13ex,
+        #fff0 0 14ex,
+        currentColor 0 16ex
+      );
+    }
+
+    .visually-hidden {
+      position: fixed;
+      width: 0;
+      height: 0;
+      pointer-events: none;
+    }
+
+    body {
+      display: grid;
+      place-items: center;
+      background: linear-gradient(rgb(6 40 41), rgb(10 10 10));
+      height: 100svh;
+      margin: 0;
+      font-family: sans-serif;
+    }
+
+    main {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .radar {
+      position: relative;
+      aspect-ratio: 19/13;
+      border: 1px solid #000;
+      background: var(--primary);
+      width: 200px;
+      padding: 0.2rem 0 0.4rem;
+      container-type: size;
+      display: grid;
+      grid-template-rows: auto 1fr 50px;
+      overflow: hidden;
+    }
+    
+    .bg-overlay {
+      position: absolute;
+      inset: 0;
+      transform: translate3d(0,0,0);
+      mix-blend-mode: overlay;
+    }
+    
+    .bg-overlay::before,
+    .bg-overlay::after {
+      content: '';
+      position: absolute;
+      display: block;
+      inset: 0;
+    }
+    
+    .bg-overlay::before {
+      filter: url(#noiseFilter);
+      transform: translate3d(0,0,0);
+    }
+    
+    .bg-overlay::after {
+      background: rgba(255 255 255 / 0.32);
+      animation: scanlines 7ms linear infinite;
+    }
+    
+    header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #000;
+      padding-block: 0cqh 3cqh;
+      font-family: "Tiny5", monospace;
+    }
+    
+    header.blink {
+      animation: blink 700ms infinite cubic-bezier(0, 0.55, 0.45, 1);
+    }
+    
+    h2 {
+      display: grid;
+      grid-template-rows: repeat(2, auto);
+      text-align: center;
+      text-transform: uppercase;
+      font-size: 12cqw;
+      color: var(--primary, #fff);
+      margin: 0;
+    }
+    
+    h2::after {
+      content: '';
+      display: block;
+      background: var(--gibbgrad);
+      font-size: 6px;
+      height: 1ex;
+      padding: 0 1.2em;
+      margin-inline: -1.2em;
+      width: 100%;
+    }
+    
+    .kanji {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'DotGothic16', sans-serif;
+      font-size: 18cqw;
+    }
+    
+    .flex {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+    }
+    
+    .gibberish {
+      display: grid;
+      height: fit-content;
+      font-family: 'Flow Block', sans-serif;
+      font-size: 0.2em;
+      text-align: justify;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+      grid-template-areas: "a1" "a2" "a3" "a4" "a5" "a6";
+      grid-template-rows: repeat(6, var(--line-size));
+      animation: 
+        area 6000ms infinite linear,
+        fadeLastLine 1000ms infinite 500ms linear;
+    }
+    
+    .gibberish span:nth-child(1) { grid-area: a1; }
+    .gibberish span:nth-child(2) { grid-area: a2; }
+    .gibberish span:nth-child(3) { grid-area: a3; }
+    .gibberish span:nth-child(4) { grid-area: a4; }
+    .gibberish span:nth-child(5) { grid-area: a5; }
+    .gibberish span:nth-child(6) { grid-area: a6; }
+    
+    .timer {
+      --sec: round(down, var(--timer));
+      --msec: round(down, calc(var(--timer) * 100 - var(--sec) * 100));
+      
+      display: grid;
+      grid-area: "a";
+      place-items: center;
+      justify-self: center;
+      border: 3px solid #000;
+      border-inline-width: 0px;
+      font-family: "Orbitron", monospace;
+      font-size: 20cqw;
+      counter-reset: sec var(--sec) msec var(--msec);
+      animation: timer 40s infinite linear;
+    }
+    
+    .timer::before,
+    .timer::after {
+      grid-area: a;
+    }
+    
+    .timer::before {
+      content: '88.88';
+      opacity: 0.4;
+    }
+    
+    .timer::after {
+      content: counter(sec, decimal-leading-zero) "." counter(msec, decimal-leading-zero);
+    }
+
+    @keyframes scanlines {
+      from {
+        clip-path: polygon(0 0, 100% 0, 100% 2px, 0 2px);
+      }
+      
+      to {
+        clip-path: polygon(0 calc(100% - 2px), 100% calc(100% - 2px), 100% 100%, 0 100%);
+      }
+    }
+
+    @keyframes fadeLastLine {
+      0% {
+        clip-path: polygon(0 0, 0 100%, 0 100%, 0 calc(100% - var(--line-size)), 100% calc(100% - var(--line-size)), 100% 0);
+      }
+
+      100% {
+        clip-path: polygon(0 0, 0 100%, 100% 100%, 100% calc(100% - var(--line-size)), 100% calc(100% - var(--line-size)), 100% 0);
+      }
+    }
+
+    @keyframes area {
+      0% {
+        grid-template-areas: "a1" "a2" "a3" "a4" "a5" "a6";
+      }
+      16.66% {
+        grid-template-areas: "a2" "a3" "a4" "a5" "a6" "a1";
+      }
+      33.33% {
+        grid-template-areas: "a3" "a4" "a5" "a6" "a1" "a2";
+      }
+      50% {
+        grid-template-areas: "a4" "a5" "a6" "a1" "a2" "a3";
+      }
+      66.66% {
+        grid-template-areas: "a5" "a6" "a1" "a2" "a3" "a4";
+      }
+      83.33% {
+        grid-template-areas: "a6" "a1" "a2" "a3" "a4" "a5";
+      }
+      100% {
+        grid-template-areas: "a1" "a2" "a3" "a4" "a5" "a6";
+      }
+    }
+
+    @keyframes blink {
+      from, to {
+        opacity: 0;
+      }
+      
+      50% {
+        opacity: 1;
+      }
+    }
+
+    @keyframes timer {
+      from {
+        --timer: 99.99;
+      }
+      
+      to {
+        --timer: 00.00;
+      }
+    }
+
+    .jamming {
+      --primary: rgb(2, 137, 68);
+      --line-size: 8px;
+    }
+
+    .evasion {
+      --primary: rgb(123, 111, 18);
+      --line-size: 5px;
+    }
+
+    .alert {
+      --primary: rgb(189, 43, 37);
+      --line-size: 5px;
+    }
+
+    .lockdown {
+      --primary: rgb(72, 22, 148);
+      --line-size: 5px;
+    }
+  </style>
+</head>
+<body>
+  <svg viewBox="0 0 20 20" class="visually-hidden">
+    <defs>
+      <filter id='noiseFilter'>
+        <feTurbulence type='fractalNoise' baseFrequency='0.5' seed='0'>
+          <animate attributeName="seed" values="1;3;5;1" dur="0.2s" repeatCount="indefinite" />
+        </feTurbulence>
+      </filter>
+    </defs>
+  </svg>
+
+  <main>
+    <div class="radar jamming">
+      <span class="bg-overlay"></span>
+      <header>
+        <h2>Jamming</h2>
+      </header>
+
+      <div class="kanji">
+        <span aria-labelledby="h2">
+          電波障害
+        </span>
+      </div>
+
+      <div class="gibberish" aria-hidden>
+        <span> - --- ------ -- - -- - ---- - - ------ -- - - -- </span>
+        <span> -- ------- --- - -- ----- - --- - - ------------ </span>
+        <span> --- ------ -- --- ------- --------- -- - - ----- </span>
+        <span> ---- ----- -- - --- ------ - --- ---- - -------- </span>
+        <span> ----- ------- - - --- - ----- -- - --- - ----- - </span>
+        <span> ------ -- - -- - ---- - - ---------- -- - - ---- </span>
+      </div>
+    </div>
+
+    <div class="radar evasion">
+      <span class="bg-overlay"></span>
+      <header class="blink">
+        <h2>Evasion</h2>
+      </header>
+      <div class="flex">
+        <div class="kanji">
+          <span aria-labelledby="h2">
+            回逃
+          </span>
+        </div>
+        <div class="gibberish">
+          <span>---- ----- - ---- -</span>
+          <span>--- --- ------- - -</span>
+          <span>- --- --------- ---</span>
+          <span>-------- -- - ------</span>
+          <span>--- --- ---------- -</span>
+          <span>--- -  -- ------- -</span>
+        </div>
+      </div>
+      <div class="timer">
+      </div>
+    </div>
+    
+    <div class="radar alert">
+      <span class="bg-overlay"></span>
+      <header class="blink">
+        <h2>Alert</h2>
+      </header>
+      <div class="flex">
+        <div class="kanji">
+          <span aria-labelledby="h2">
+            危険
+          </span>
+        </div>
+        <div class="gibberish">
+          <span>---- ----- - ---- -</span>
+          <span>--- --- ------- - -</span>
+          <span>- --- --------- ---</span>
+          <span>-------- -- - ------</span>
+          <span>--- --- ---------- -</span>
+          <span>--- -  -- ------- -</span>
+        </div>
+      </div>
+      <div class="timer">
+      </div>
+    </div>
+    
+    <div class="radar lockdown">
+      <span class="bg-overlay"></span>
+      <header class="blink">
+        <h2>Lockdown</h2>
+      </header>
+      <div class="flex">
+        <div class="kanji">
+          <span aria-labelledby="h2">
+            封鎖
+          </span>
+        </div>
+        <div class="gibberish">
+          <span>--- ----- -- - ---- --</span>
+          <span>-- ------ --- - ----- -</span>
+          <span>----- --- ------ ---- -</span>
+          <span>--- ----- - ----- -----</span>
+          <span>---- ------ -- - ------</span>
+          <span>----- --- ------ ---- --</span>
+        </div>
+      </div>
+      <div class="timer">
+      </div>
+    </div>
+  </main>
+</body>
+</html>

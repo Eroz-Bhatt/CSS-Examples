@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NOSH Professional Logo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{
+      background:#000;
+      color:#fff;
+      font-family:'Barlow Condensed',Impact,sans-serif;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      height:100vh;
+      overflow:hidden;
+    }
+    .container{
+      position:relative;
+      z-index:10;
+      text-align:center;
+      padding:40px;
+    }
+    .logo{
+      font-size:18vw;
+      font-weight:700;
+      color:#900c0c;
+      letter-spacing:3px;
+      text-transform:uppercase;
+      text-shadow:0 0 15px rgba(144,12,12,.5);
+      transition:text-shadow .5s;
+    }
+    .logo:hover{text-shadow:0 0 25px rgba(144,12,12,.8)}
+    .logo span{
+      display:inline-block;
+      animation:flicker 2.5s infinite;
+    }
+    .subtitle{
+      font-size:1.5rem;
+      letter-spacing:8px;
+      margin-top:20px;
+      color:#aaa;
+      text-transform:uppercase;
+    }
+    .glow{
+      position:absolute;
+      top:50%;left:50%;
+      width:400px;height:400px;
+      transform:translate(-50%,-50%);
+      background:radial-gradient(circle,rgba(144,12,12,.3) 0%,transparent 70%);
+      border-radius:50%;
+      filter:blur(30px);
+      animation:pulse 4s infinite;
+      z-index:-1;
+    }
+    .corner{
+      position:absolute;
+      width:80px;height:80px;
+      border:2px solid #900c0c;
+      opacity:.3;
+    }
+    .tl{top:20px;left:20px;border-right:none;border-bottom:none}
+    .tr{top:20px;right:20px;border-left:none;border-bottom:none}
+    .bl{bottom:20px;left:20px;border-right:none;border-top:none}
+    .br{bottom:20px;right:20px;border-left:none;border-top:none}
+    .footer{
+      position:absolute;
+      bottom:30px;
+      font-size:.9rem;
+      letter-spacing:1px;
+      color:#444;
+    }
+    @keyframes flicker{
+      0%,19%,21%,23%,25%,54%,56%,100%{color:#900c0c;text-shadow:0 0 15px rgba(144,12,12,.5)}
+      20%,24%,55%{color:rgba(144,12,12,.1);text-shadow:none}
+    }
+    @keyframes pulse{
+      0%,100%{opacity:.3}
+      50%{opacity:.5}
+    }
+    @media(max-width:768px){
+      .logo{font-size:25vw}
+      .subtitle{font-size:1.2rem;letter-spacing:5px}
+    }
+  </style>
+</head>
+<body>
+
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <div class="container">
+    <div class="logo">N<span>O</span>SH</div>
+    <div class="subtitle">A Culinary Kitchen</div>
+  </div>
+
+  <div class="glow"></div>
+
+  <div class="footer">EST. 2012 | NEW YORK • LONDON • TOKYO</div>
+
+</body>
+</html>

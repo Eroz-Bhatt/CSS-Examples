@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Magical Fireflies</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        height: 100vh;
+        background: radial-gradient(circle at center, #0a0a0a 0%, #000 100%);
+        overflow: hidden;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        position: relative;
+      }
+
+      .firefly {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 0.4vw;
+        height: 0.4vw;
+        margin: -0.2vw 0 0 9.8vw;
+        animation: ease 200s alternate infinite;
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      .firefly::before,
+      .firefly::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        transform-origin: -10vw;
+      }
+
+      .firefly::before {
+        background: rgba(0, 0, 0, 0.6);
+        animation: drift ease alternate infinite;
+      }
+
+      .firefly::after {
+        background: white;
+        opacity: 0;
+        box-shadow: 0 0 0vw 0vw yellow;
+        animation: drift ease alternate infinite, flash ease infinite;
+      }
+
+      /* Enhanced red glow */
+      .red-mode .firefly::after {
+        background: #ff6b6b;
+        box-shadow: 0 0 0vw 0vw #ff3333;
+        animation: drift ease alternate infinite, flash-red ease infinite;
+      }
+
+      /* Firefly animations - 30 unique paths */
+      .firefly:nth-child(1) {
+        animation-name: move1;
+      }
+      .firefly:nth-child(2) {
+        animation-name: move2;
+      }
+      .firefly:nth-child(3) {
+        animation-name: move3;
+      }
+      .firefly:nth-child(4) {
+        animation-name: move4;
+      }
+      .firefly:nth-child(5) {
+        animation-name: move5;
+      }
+      .firefly:nth-child(6) {
+        animation-name: move6;
+      }
+      .firefly:nth-child(7) {
+        animation-name: move7;
+      }
+      .firefly:nth-child(8) {
+        animation-name: move8;
+      }
+      .firefly:nth-child(9) {
+        animation-name: move9;
+      }
+      .firefly:nth-child(10) {
+        animation-name: move10;
+      }
+      .firefly:nth-child(11) {
+        animation-name: move11;
+      }
+      .firefly:nth-child(12) {
+        animation-name: move12;
+      }
+      .firefly:nth-child(13) {
+        animation-name: move13;
+      }
+      .firefly:nth-child(14) {
+        animation-name: move14;
+      }
+      .firefly:nth-child(15) {
+        animation-name: move15;
+      }
+      .firefly:nth-child(16) {
+        animation-name: move16;
+      }
+      .firefly:nth-child(17) {
+        animation-name: move17;
+      }
+      .firefly:nth-child(18) {
+        animation-name: move18;
+      }
+      .firefly:nth-child(19) {
+        animation-name: move19;
+      }
+      .firefly:nth-child(20) {
+        animation-name: move20;
+      }
+      .firefly:nth-child(21) {
+        animation-name: move21;
+      }
+      .firefly:nth-child(22) {
+        animation-name: move22;
+      }
+      .firefly:nth-child(23) {
+        animation-name: move23;
+      }
+      .firefly:nth-child(24) {
+        animation-name: move24;
+      }
+      .firefly:nth-child(25) {
+        animation-name: move25;
+      }
+      .firefly:nth-child(26) {
+        animation-name: move26;
+      }
+      .firefly:nth-child(27) {
+        animation-name: move27;
+      }
+      .firefly:nth-child(28) {
+        animation-name: move28;
+      }
+      .firefly:nth-child(29) {
+        animation-name: move29;
+      }
+      .firefly:nth-child(30) {
+        animation-name: move30;
+      }
+
+      /* Animation durations and delays */
+      .firefly:nth-child(1)::before {
+        animation-duration: 12s;
+      }
+      .firefly:nth-child(1)::after {
+        animation-duration: 12s, 9500ms;
+        animation-delay: 0ms, 3200ms;
+      }
+
+      .firefly:nth-child(2)::before {
+        animation-duration: 15s;
+      }
+      .firefly:nth-child(2)::after {
+        animation-duration: 15s, 7000ms;
+        animation-delay: 0ms, 1500ms;
+      }
+
+      .firefly:nth-child(3)::before {
+        animation-duration: 9s;
+      }
+      .firefly:nth-child(3)::after {
+        animation-duration: 9s, 8500ms;
+        animation-delay: 0ms, 4200ms;
+      }
+
+      .firefly:nth-child(4)::before {
+        animation-duration: 14s;
+      }
+      .firefly:nth-child(4)::after {
+        animation-duration: 14s, 10500ms;
+        animation-delay: 0ms, 2800ms;
+      }
+
+      .firefly:nth-child(5)::before {
+        animation-duration: 11s;
+      }
+      .firefly:nth-child(5)::after {
+        animation-duration: 11s, 9000ms;
+        animation-delay: 0ms, 5000ms;
+      }
+
+      .firefly:nth-child(6)::before {
+        animation-duration: 16s;
+      }
+      .firefly:nth-child(6)::after {
+        animation-duration: 16s, 6500ms;
+        animation-delay: 0ms, 1800ms;
+      }
+
+      .firefly:nth-child(7)::before {
+        animation-duration: 10s;
+      }
+      .firefly:nth-child(7)::after {
+        animation-duration: 10s, 8000ms;
+        animation-delay: 0ms, 3500ms;
+      }
+
+      .firefly:nth-child(8)::before {
+        animation-duration: 13s;
+      }
+      .firefly:nth-child(8)::after {
+        animation-duration: 13s, 7500ms;
+        animation-delay: 0ms, 2500ms;
+      }
+
+      .firefly:nth-child(9)::before {
+        animation-duration: 17s;
+      }
+      .firefly:nth-child(9)::after {
+        animation-duration: 17s, 10000ms;
+        animation-delay: 0ms, 4000ms;
+      }
+
+      .firefly:nth-child(10)::before {
+        animation-duration: 8s;
+      }
+      .firefly:nth-child(10)::after {
+        animation-duration: 8s, 5500ms;
+        animation-delay: 0ms, 1000ms;
+      }
+
+      .firefly:nth-child(11)::before {
+        animation-duration: 12s;
+      }
+      .firefly:nth-child(11)::after {
+        animation-duration: 12s, 9000ms;
+        animation-delay: 0ms, 4500ms;
+      }
+
+      .firefly:nth-child(12)::before {
+        animation-duration: 14s;
+      }
+      .firefly:nth-child(12)::after {
+        animation-duration: 14s, 8000ms;
+        animation-delay: 0ms, 2000ms;
+      }
+
+      .firefly:nth-child(13)::before {
+        animation-duration: 11s;
+      }
+      .firefly:nth-child(13)::after {
+        animation-duration: 11s, 9500ms;
+        animation-delay: 0ms, 3800ms;
+      }
+
+      .firefly:nth-child(14)::before {
+        animation-duration: 15s;
+      }
+      .firefly:nth-child(14)::after {
+        animation-duration: 15s, 7000ms;
+        animation-delay: 0ms, 1500ms;
+      }
+
+      .firefly:nth-child(15)::before {
+        animation-duration: 9s;
+      }
+      .firefly:nth-child(15)::after {
+        animation-duration: 9s, 8500ms;
+        animation-delay: 0ms, 3200ms;
+      }
+
+      .firefly:nth-child(16)::before {
+        animation-duration: 13s;
+      }
+      .firefly:nth-child(16)::after {
+        animation-duration: 13s, 9200ms;
+        animation-delay: 0ms, 2100ms;
+      }
+
+      .firefly:nth-child(17)::before {
+        animation-duration: 10s;
+      }
+      .firefly:nth-child(17)::after {
+        animation-duration: 10s, 7800ms;
+        animation-delay: 0ms, 4300ms;
+      }
+
+      .firefly:nth-child(18)::before {
+        animation-duration: 16s;
+      }
+      .firefly:nth-child(18)::after {
+        animation-duration: 16s, 6700ms;
+        animation-delay: 0ms, 1700ms;
+      }
+
+      .firefly:nth-child(19)::before {
+        animation-duration: 11s;
+      }
+      .firefly:nth-child(19)::after {
+        animation-duration: 11s, 8800ms;
+        animation-delay: 0ms, 4900ms;
+      }
+
+      .firefly:nth-child(20)::before {
+        animation-duration: 14s;
+      }
+      .firefly:nth-child(20)::after {
+        animation-duration: 14s, 10300ms;
+        animation-delay: 0ms, 2600ms;
+      }
+
+      .firefly:nth-child(21)::before {
+        animation-duration: 9s;
+      }
+      .firefly:nth-child(21)::after {
+        animation-duration: 9s, 8300ms;
+        animation-delay: 0ms, 3700ms;
+      }
+
+      .firefly:nth-child(22)::before {
+        animation-duration: 15s;
+      }
+      .firefly:nth-child(22)::after {
+        animation-duration: 15s, 7200ms;
+        animation-delay: 0ms, 1400ms;
+      }
+
+      .firefly:nth-child(23)::before {
+        animation-duration: 12s;
+      }
+      .firefly:nth-child(23)::after {
+        animation-duration: 12s, 9400ms;
+        animation-delay: 0ms, 4100ms;
+      }
+
+      .firefly:nth-child(24)::before {
+        animation-duration: 17s;
+      }
+      .firefly:nth-child(24)::after {
+        animation-duration: 17s, 9900ms;
+        animation-delay: 0ms, 3300ms;
+      }
+
+      .firefly:nth-child(25)::before {
+        animation-duration: 8s;
+      }
+      .firefly:nth-child(25)::after {
+        animation-duration: 8s, 5600ms;
+        animation-delay: 0ms, 1200ms;
+      }
+
+      .firefly:nth-child(26)::before {
+        animation-duration: 13s;
+      }
+      .firefly:nth-child(26)::after {
+        animation-duration: 13s, 7600ms;
+        animation-delay: 0ms, 2900ms;
+      }
+
+      .firefly:nth-child(27)::before {
+        animation-duration: 10s;
+      }
+      .firefly:nth-child(27)::after {
+        animation-duration: 10s, 8100ms;
+        animation-delay: 0ms, 4600ms;
+      }
+
+      .firefly:nth-child(28)::before {
+        animation-duration: 16s;
+      }
+      .firefly:nth-child(28)::after {
+        animation-duration: 16s, 6800ms;
+        animation-delay: 0ms, 1900ms;
+      }
+
+      .firefly:nth-child(29)::before {
+        animation-duration: 11s;
+      }
+      .firefly:nth-child(29)::after {
+        animation-duration: 11s, 8700ms;
+        animation-delay: 0ms, 4800ms;
+      }
+
+      .firefly:nth-child(30)::before {
+        animation-duration: 14s;
+      }
+      .firefly:nth-child(30)::after {
+        animation-duration: 14s, 10100ms;
+        animation-delay: 0ms, 2700ms;
+      }
+
+      /* Motion paths for fireflies (abbreviated for clarity) */
+      @keyframes move1 {
+        0% {
+          transform: translateX(0) translateY(0) scale(0.8);
+        }
+        100% {
+          transform: translateX(-35vw) translateY(25vh) scale(0.9);
+        }
+      }
+      @keyframes move2 {
+        0% {
+          transform: translateX(0) translateY(0) scale(0.7);
+        }
+        100% {
+          transform: translateX(40vw) translateY(-30vh) scale(0.85);
+        }
+      }
+      @keyframes move3 {
+        0% {
+          transform: translateX(0) translateY(0) scale(0.9);
+        }
+        100% {
+          transform: translateX(-25vw) translateY(-35vh) scale(0.75);
+        }
+      }
+      @keyframes move4 {
+        0% {
+          transform: translateX(0) translateY(0) scale(0.6);
+        }
+        100% {
+          transform: translateX(30vw) translateY(22vh) scale(0.8);
+        }
+      }
+      @keyframes move5 {
+        0% {
+          transform: translateX(0) translateY(0) scale(0.75);
+        }
+        100% {
+          transform: translateX(-40vw) translateY(-15vh) scale(0.65);
+        }
+      }
+      @keyframes move6 {
+        0% {
+          transform: translateX(0) translateY(0) scale(0.85);
+        }
+        100% {
+          transform: translateX(20vw) translateY(-25vh) scale(0.95);
+        }
+      }
+      @keyframes move7 {
+        0% {
+          transform: translateX(0) translateY(0) scale(0.7);
+        }
+        100% {
+          transform: translateX(-15vw) translateY(35vh) scale(0.8);
+        }
+      }
+      @keyframes move8 {
+        0% {
+          transform: translateX(0) translateY(0) scale(0.55);
+        }
+        100% {
+          transform: translateX(45vw) translateY(18vh) scale(0.75);
+        }
+      }
+      @keyframes move9 {
+        0% {
+          transform: translateX(0) translateY(0) scale(0.9);
+        }
+        100% {
+          transform: translateX(-28vw) translateY(-22vh) scale(0.6);
+        }
+      }
+      @keyframes move10 {
+        0% {
+          transform: translateX(0) translateY(0) scale(0.65);
+        }
+        100% {
+          transform: translateX(38vw) translateY(-18vh) scale(0.85);
+        }
+      }
+      @keyframes move11 {
+        0% {
+          transform: translateX(0) translateY(0) scale(0.8);
+        }
+        100% {
+          transform: translateX(-22vw) translateY(30vh) scale(0.7);
+        }
+      }
+      @keyframes move12 {
+        0% {
+          transform: translateX(0) translateY(0) scale(0.6);
+        }
+        100% {
+          transform: translateX(25vw) translateY(-32vh) scale(0.9);
+        }
+      }
+      @keyframes move13 {
+        0% {
+          transform: translateX(0) translateY(0) scale(0.75);
+        }
+        100% {
+          transform: translateX(-38vw) translateY(15vh) scale(0.65);
+        }
+      }
+      @keyframes move14 {
+        0% {
+          transform: translateX(0) translateY(0) scale(0.85);
+        }
+        100% {
+          transform: translateX(42vw) translateY(20vh) scale(0.55);
+        }
+      }
+      @keyframes move15 {
+        0% {
+          transform: translateX(0) translateY(0) scale(0.7);
+        }
+        100% {
+          transform: translateX(-20vw) translateY(-28vh) scale(0.8);
+        }
+      }
+      @keyframes move16 {
+        0% {
+          transform: translateX(0) translateY(0) scale(0.8);
+        }
+        100% {
+          transform: translateX(35vw) translateY(-22vh) scale(0.9);
+        }
+      }
+      @keyframes move17 {
+        0% {
+          transform: translateX(0) translateY(0) scale(0.7);
+        }
+        100% {
+          transform: translateX(-42vw) translateY(18vh) scale(0.75);
+        }
+      }
+      @keyframes move18 {
+        0% {
+          transform: translateX(0) translateY(0) scale(0.9);
+        }
+        100% {
+          transform: translateX(28vw) translateY(32vh) scale(0.65);
+        }
+      }
+      @keyframes move19 {
+        0% {
+          transform: translateX(0) translateY(0) scale(0.6);
+        }
+        100% {
+          transform: translateX(-30vw) translateY(-25vh) scale(0.85);
+        }
+      }
+      @keyframes move20 {
+        0% {
+          transform: translateX(0) translateY(0) scale(0.75);
+        }
+        100% {
+          transform: translateX(40vw) translateY(15vh) scale(0.7);
+        }
+      }
+      @keyframes move21 {
+        0% {
+          transform: translateX(0) translateY(0) scale(0.85);
+        }
+        100% {
+          transform: translateX(-18vw) translateY(-30vh) scale(0.8);
+        }
+      }
+      @keyframes move22 {
+        0% {
+          transform: translateX(0) translateY(0) scale(0.7);
+        }
+        100% {
+          transform: translateX(32vw) translateY(28vh) scale(0.95);
+        }
+      }
+      @keyframes move23 {
+        0% {
+          transform: translateX(0) translateY(0) scale(0.55);
+        }
+        100% {
+          transform: translateX(-45vw) translateY(-20vh) scale(0.75);
+        }
+      }
+      @keyframes move24 {
+        0% {
+          transform: translateX(0) translateY(0) scale(0.9);
+        }
+        100% {
+          transform: translateX(22vw) translateY(35vh) scale(0.6);
+        }
+      }
+      @keyframes move25 {
+        0% {
+          transform: translateX(0) translateY(0) scale(0.65);
+        }
+        100% {
+          transform: translateX(-35vw) translateY(-15vh) scale(0.85);
+        }
+      }
+      @keyframes move26 {
+        0% {
+          transform: translateX(0) translateY(0) scale(0.8);
+        }
+        100% {
+          transform: translateX(30vw) translateY(-25vh) scale(0.7);
+        }
+      }
+      @keyframes move27 {
+        0% {
+          transform: translateX(0) translateY(0) scale(0.6);
+        }
+        100% {
+          transform: translateX(-25vw) translateY(30vh) scale(0.9);
+        }
+      }
+      @keyframes move28 {
+        0% {
+          transform: translateX(0) translateY(0) scale(0.75);
+        }
+        100% {
+          transform: translateX(38vw) translateY(-18vh) scale(0.65);
+        }
+      }
+      @keyframes move29 {
+        0% {
+          transform: translateX(0) translateY(0) scale(0.85);
+        }
+        100% {
+          transform: translateX(-40vw) translateY(22vh) scale(0.55);
+        }
+      }
+      @keyframes move30 {
+        0% {
+          transform: translateX(0) translateY(0) scale(0.7);
+        }
+        100% {
+          transform: translateX(28vw) translateY(-30vh) scale(0.8);
+        }
+      }
+
+      /* Drift animation */
+      @keyframes drift {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Yellow flash animation */
+      @keyframes flash {
+        0%,
+        30%,
+        100% {
+          opacity: 0;
+          box-shadow: 0 0 0vw 0vw yellow;
+        }
+        5% {
+          opacity: 1;
+          box-shadow: 0 0 2vw 0.4vw yellow;
+        }
+      }
+
+      /* Enhanced red flash animation */
+      @keyframes flash-red {
+        0%,
+        30%,
+        100% {
+          opacity: 0;
+          box-shadow: 0 0 0vw 0vw #ff3333;
+        }
+        5% {
+          opacity: 1;
+          /* Enhanced glow with increased spread and brighter color */
+          box-shadow: 0 0 3.5vw 0.6vw #ff4d4d;
+        }
+      }
+
+      .toggle-container {
+        position: fixed;
+        top: 30px;
+        right: 30px;
+        z-index: 100;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 15px;
+      }
+
+      .toggle-btn {
+        padding: 14px 25px;
+        background: rgba(30, 30, 30, 0.85);
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 30px;
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(8px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .toggle-btn:hover {
+        background: rgba(50, 50, 50, 0.95);
+        border-color: rgba(255, 255, 255, 0.5);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+      }
+
+      .toggle-btn:active {
+        transform: translateY(1px);
+      }
+
+      .color-indicator {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: yellow;
+        box-shadow: 0 0 12px yellow;
+        transition: all 0.3s ease;
+      }
+
+      .red-mode .color-indicator {
+        background: #ff4d4d;
+        box-shadow: 0 0 15px #ff3333;
+      }
+
+      .title {
+        position: fixed;
+        top: 30px;
+        left: 40px;
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 32px;
+        font-weight: 300;
+        z-index: 100;
+        text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+      }
+
+      .title span {
+        color: yellow;
+        font-weight: 500;
+        text-shadow: 0 0 20px yellow;
+        transition: all 0.5s ease;
+      }
+
+      .red-mode .title span {
+        color: #ff6b6b;
+        text-shadow: 0 0 20px #ff3333;
+      }
+
+      .info {
+        position: fixed;
+        bottom: 30px;
+        left: 40px;
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 16px;
+        max-width: 400px;
+        line-height: 1.6;
+        z-index: 100;
+      }
+
+      .particles {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .particle {
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        animation: twinkle 10s infinite;
+      }
+
+      @keyframes twinkle {
+        0%,
+        100% {
+          opacity: 0.1;
+        }
+        50% {
+          opacity: 0.3;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="title">Magical <span>Fireflies</span></div>
+
+    <div class="toggle-container">
+      <button class="toggle-btn" id="colorToggle">
+        <div class="color-indicator"></div>
+        Switch to Red
+      </button>
+    </div>
+
+    <div class="info">
+      Double the fireflies (30 total) with enhanced red glow. Toggle between
+      yellow and red modes.
+    </div>
+
+    <div class="particles" id="particles"></div>
+
+    <!-- 30 Fireflies -->
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+
+    <script>
+      // Toggle color mode
+      const toggleBtn = document.getElementById('colorToggle');
+      const body = document.body;
+
+      toggleBtn.addEventListener('click', function () {
+        body.classList.toggle('red-mode');
+        toggleBtn.innerHTML = body.classList.contains('red-mode')
+          ? '<div class="color-indicator"></div>Switch to Yellow'
+          : '<div class="color-indicator"></div>Switch to Red';
+      });
+
+      // Create background particles
+      const particlesContainer = document.getElementById('particles');
+      for (let i = 0; i < 150; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.top = `${Math.random() * 100}%`;
+        particle.style.animationDelay = `${Math.random() * 10}s`;
+        particle.style.width = `${Math.random() * 3 + 1}px`;
+        particle.style.height = particle.style.width;
+        particlesContainer.appendChild(particle);
+      }
+
+      // Generate dynamic motion paths for fireflies
+      const fireflies = document.querySelectorAll('.firefly');
+      fireflies.forEach((fly, index) => {
+        const steps = 16;
+        let keyframes = `@keyframes move${index + 1} { `;
+
+        for (let step = 0; step <= steps; step++) {
+          const percentage = step * (100 / steps);
+          const translateX = Math.random() * 200 - 100 + 'vw';
+          const translateY = Math.random() * 200 - 100 + 'vh';
+          const scale = (Math.random() * 0.7 + 0.3).toFixed(2);
+
+          keyframes += `${percentage}% { transform: translateX(${translateX}) translateY(${translateY}) scale(${scale}); } `;
+        }
+
+        keyframes += '}';
+
+        const style = document.createElement('style');
+        style.textContent = keyframes;
+        document.head.appendChild(style);
+      });
+    </script>
+  </body>
+</html>

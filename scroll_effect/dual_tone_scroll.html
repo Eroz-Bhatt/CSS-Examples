@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dual-Color Scroll Reveal</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700;900&display=swap" rel="stylesheet">
+
+  <style>
+    /* reset */
+    *{margin:0;padding:0;box-sizing:border-box}
+
+    body{
+      font-family:'Raleway',sans-serif;
+      font-size:14px;
+      color:#fff;
+      overflow-x:hidden;
+    }
+    a{color:inherit;text-decoration:none}
+
+    /* --- section shell --- */
+    .section{
+      height:100vh;
+      min-height:500px;
+      position:relative;
+    }
+    .content-container{
+      position:absolute;
+      top:0;right:0;bottom:0;left:0;
+      clip:rect(auto,auto,auto,auto);
+      pointer-events:none;
+    }
+    .content-inner{
+      position:fixed;
+      top:0;left:0;right:0;height:100%;
+      display:flex;align-items:center;justify-content:center;flex-direction:column;
+      z-index:99;
+      transform:translateZ(0);
+      backface-visibility:hidden;
+      will-change:transform;
+      pointer-events:all;
+    }
+
+    /* --- colors & typography --- */
+    .section h1{
+      font-size:clamp(80px, 15vw, 200px);
+      font-weight:900;
+      text-transform:uppercase;
+      text-align:center;
+      text-shadow:0 20px 40px rgba(0,0,0,.5);
+    }
+    .section p,
+    .section a{
+      font-weight:700;
+      letter-spacing:7px;
+      text-transform:uppercase;
+      text-align:center;
+    }
+
+    /* --- slide themes --- */
+    .dark-slide{
+      background:linear-gradient(135deg,#f4583a 0%,#cd1e38 100%);
+    }
+    .dark-slide h1{color:#e33e39}
+    .dark-slide p,
+    .dark-slide a{color:#fea98d}
+
+    .light-slide{
+      background:#d4fef2;
+    }
+    .light-slide h1{color:#062930}
+    .light-slide p,
+    .light-slide a{color:#728e93}
+  </style>
+</head>
+
+<body>
+
+  <!-- ===== Slide 1 ===== -->
+  <section class="section dark-slide">
+    <div class="content-container">
+      <div class="content-inner">
+        <h1>Finest</h1>
+        <p>Dual Color Text Effect &nbsp;<a href="http://finestpixels.com/" target="_blank">by&nbsp;Finest&nbsp;Pixels</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Slide 2 ===== -->
+  <section class="section light-slide">
+    <div class="content-container">
+      <div class="content-inner">
+        <h1>Finest</h1>
+        <p>Dual Color Text Effect &nbsp;<a href="http://finestpixels.com/" target="_blank">by&nbsp;Finest&nbsp;Pixels</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Add more sections as needed ===== -->
+
+</body>
+</html>

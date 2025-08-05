@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luminous Absence - Filip Zrnzević</title>
+    
+    <!-- Font imports -->
+    <link href="https://fonts.googleapis.com/css2?family=Boldonse&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Variables for easy customization */
+        :root {
+          --primary-font: "Boldonse", sans-serif;
+          --secondary-font: "Bodoni Moda", serif;
+          --primary-color: #e0e0e0;
+          --secondary-color: rgba(255, 255, 255, 0.5);
+          --quote-size: 8vw;
+          --author-size: 1vw;
+          --cursor-size: 16px;
+          --ghost-color: #000000;
+          --eye-glow-color: #ffff00;
+        }
+
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+
+        html,
+        body {
+          width: 100%;
+          height: 100%;
+          overflow: hidden;
+          cursor: none;
+          background-color: #111;
+          letter-spacing: -0.03em;
+          position: relative;
+        }
+
+        /* Background noise effect with will-change optimization */
+        body::before {
+          content: "";
+          position: fixed;
+          top: -50%;
+          left: -50%;
+          width: 200%;
+          height: 200%;
+          background: transparent
+            url("http://assets.iceable.com/img/noise-transparent.png") repeat 0 0;
+          background-size: 300px 300px;
+          animation: noise-animation 0.3s steps(5) infinite;
+          opacity: 1;
+          will-change: transform;
+          z-index: 100;
+          pointer-events: none;
+        }
+
+        @keyframes noise-animation {
+          0% {
+            transform: translate(0, 0);
+          }
+          10% {
+            transform: translate(-2%, -3%);
+          }
+          20% {
+            transform: translate(-4%, 2%);
+          }
+          30% {
+            transform: translate(2%, -4%);
+          }
+          40% {
+            transform: translate(-2%, 5%);
+          }
+          50% {
+            transform: translate(-4%, 2%);
+          }
+          60% {
+            transform: translate(3%, 0);
+          }
+          70% {
+            transform: translate(0, 3%);
+          }
+          80% {
+            transform: translate(-3%, 0);
+          }
+          90% {
+            transform: translate(2%, 2%);
+          }
+          100% {
+            transform: translate(1%, 0);
+          }
+        }
+
+        /* Content to be revealed */
+        .content {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          z-index: 20;
+          padding: 20px;
+          text-align: center;
+          color: var(--primary-color);
+        }
+
+        .quote-container {
+          max-width: 90%;
+          overflow: hidden;
+        }
+
+        .quote {
+          font-family: var(--primary-font);
+          font-size: var(--quote-size);
+          line-height: 1.3;
+          font-weight: 400;
+          letter-spacing: -0.02em;
+          margin-bottom: 5vh;
+          opacity: 1;
+          text-transform: uppercase;
+        }
+
+        .author {
+          font-family: var(--secondary-font);
+          font-size: var(--author-size);
+          font-style: italic;
+          opacity: 0.7;
+          margin-top: 2vh;
+          margin-bottom: 2vh;
+        }
+
+        .caption {
+          font-family: var(--secondary-font);
+          font-size: var(--author-size);
+          margin-bottom: 2vh;
+        }
+
+        .book {
+          font-family: var(--secondary-font);
+          font-size: var(--author-size);
+          opacity: 0.5;
+          margin-top: 1vh;
+        }
+
+        /* Custom cursor */
+        .custom-cursor {
+          position: fixed;
+          width: var(--cursor-size);
+          height: var(--cursor-size);
+          border-radius: 50%;
+          background-color: var(--secondary-color);
+          transform: translate(-50%, -50%);
+          pointer-events: none;
+          mix-blend-mode: difference;
+          z-index: 9999;
+          transition: width 0.2s, height 0.2s;
+          will-change: transform;
+        }
+
+        /* Canvas overlay - Fixed to be below noise effect */
+        canvas {
+          display: block;
+          position: fixed !important;
+          top: 0 !important;
+          left: 0 !important;
+          width: 100vw !important;
+          height: 100vh !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          z-index: 2; /* Above content but below noise */
+          pointer-events: none; /* Allow clicking through to content */
+        }
+
+        .info {
+          position: fixed;
+          bottom: 10px;
+          left: 10px;
+          color: white;
+          font-family: monospace;
+          font-size: 12px;
+          background-color: rgba(0, 0, 0, 0.5);
+          padding: 5px 10px;
+          border-radius: 3px;
+          pointer-events: none;
+          z-index: 10;
+        }
+
+        /* Controls panel */
+        .dg.ac {
+          z-index: 101 !important; /* Make sure GUI is on top of noise */
+        }
+
+        #controls {
+          position: fixed;
+          top: 20px;
+          left: 20px;
+          color: white;
+          z-index: 100;
+          background-color: rgba(255, 255, 255, 0.1);
+          padding: 10px;
+          border-radius: 5px;
+          cursor: pointer;
+          user-select: none;
+          transition: all 0.5s ease-in-out;
+        }
+        #controls:hover {
+          background-color: rgba(0, 0, 0, 0.8);
+        }
+        .dg.main {
+          margin-top: 60px !important;
+        }
+        #fps {
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          color: white;
+          z-index: 100;
+          background-color: rgba(0, 0, 0, 0.5);
+          padding: 5px 10px;
+          border-radius: 5px;
+          font-size: 12px;
+        }
+
+        .book a {
+          color: white;
+        }
+
+        .profile-card {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 16px;
+          max-width: 300px;
+          width: 100%;
+          position: fixed;
+          bottom: 16px;
+          left: 16px;
+          z-index: 999;
+          color: var(--primary-color);
+          line-height: inherit;
+        }
+
+        .profile-image {
+          flex-shrink: 0;
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+
+        .profile-info {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+        }
+
+        .profile-name {
+          font-size: 14px;
+          font-weight: 500;
+        }
+
+        .profile-twitter {
+          font-size: 12px;
+          color: #71717a;
+        }
+
+        .profile-twitter a {
+          text-decoration: none;
+          color: inherit;
+        }
+
+        .profile-twitter a:hover {
+          text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+      <div class="quote-container">
+        <div class="caption">Fragments of stardust, scattered across time.</div>
+        <div class="quote">Luminous absence</div>
+        <div class="author">The light reveals what darkness conceals, but never explains</div>
+      </div>
+    </div>
+
+    <!-- Custom cursor -->
+    <div class="custom-cursor" style="opacity: 1;"></div>
+    <div id="fps">FPS: 0</div>
+
+    <div class="profile-card">
+      <img class="profile-image" src="https://filip-zrnzevic-portfolio-2025-v3.vercel.app/_next/image?url=%2Fimages%2Fprofile003.jpg&w=48&q=75" alt="Filip Zrnzević">
+      <div class="profile-info">
+        <p class="profile-name">Filip Zrnzević</p>
+        <p class="profile-twitter">
+          <a href="https://x.com/filipz" target="_blank">@filipz</a>
+        </p>
+      </div>
+    </div>
+
+    <script type="module">
+        import * as THREE from "https://esm.sh/three@0.175.0";
+        import { GUI } from "https://esm.sh/dat.gui@0.7.9";
+
+        // Setup global elements
+        const cursor = document.querySelector(".custom-cursor");
+        const fpsElement = document.getElementById("fps");
+
+        // Pure RGB color definitions - extremely simplified
+        const colorPalettes = {
+          original: {
+            primary: [0.3, 0.3, 0.6], // Light blue
+            secondary: [0.5, 0.4, 0.7] // Light purple
+          },
+          blue: {
+            primary: [0.0, 0.0, 1.0], // Pure blue
+            secondary: [0.4, 0.4, 1.0] // Light blue
+          },
+          purple: {
+            primary: [0.6, 0.0, 0.8], // Purple
+            secondary: [0.8, 0.3, 1.0] // Light purple
+          },
+          fire: {
+            primary: [1.0, 0.3, 0.0], // Orange-red
+            secondary: [1.0, 0.6, 0.2] // Light orange
+          },
+          green: {
+            primary: [0.0, 1.0, 0.0], // Pure green
+            secondary: [0.4, 1.0, 0.4] // Light green
+          },
+          rainbow: {
+            primary: [1.0, 0.0, 1.0], // Magenta
+            secondary: [0.0, 1.0, 1.0] // Cyan
+          }
+        };
+
+        // Settings for GUI - Default values from newest screenshot
+        const settings = {
+          intensity: 1.09,
+          streakLength: 48,
+          streakHeight: 0.23,
+          glowPower: 2.75,
+          useMousePosition: true,
+          flareSize: 1.52,
+          flareSpeed: 1.0,
+          colorIntensity: 0.5,
+          colorScheme: "fire",
+          contrastBW: 0.0,
+          saturation: 2.0,
+          invert: false,
+          cursorSize: 8,
+          cursorIntensity: 2.0,
+          resetPosition: () => {
+            mouse.x = 0.5;
+            mouse.y = 0.5;
+          }
+        };
+
+        // Initialize core Three.js components
+        const scene = new THREE.Scene();
+        const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
+        camera.position.z = 1;
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Mouse position tracking
+        const mouse = new THREE.Vector2(0.5, 0.5);
+        const defaultMouse = new THREE.Vector2(0.5, 0.5);
+
+        // Variables for cursor tracking
+        let isMoving = false;
+        let lastMouseX = 0;
+        let lastMouseY = 0;
+        let mouseMoveTimeout = null;
+
+        // FPS tracking variables
+        let frameCount = 0;
+        let lastTime = performance.now();
+
+        // Shader code
+        const vertexShader = `
+              varying vec2 vUv;
+              
+              void main() {
+                vUv = uv;
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+              }
+            `;
+
+        const fragmentShader = `
+              uniform vec2 iResolution;
+              uniform float iTime;
+              uniform vec2 iMouse;
+              uniform float intensity;
+              uniform float streakLength;
+              uniform float streakHeight;
+              uniform float glowPower;
+              uniform float flareSize;
+              uniform float colorIntensity;
+              uniform vec3 primaryColor;
+              uniform vec3 secondaryColor;
+              uniform float contrastBW;
+              uniform float saturation;
+              uniform bool invert;
+              varying vec2 vUv;
+              
+              // Noise function for flare variation
+              float InterleavedGradientNoise(vec2 uv) {
+                const vec3 magic = vec3(0.06711056, 0.00583715, 52.9829189);
+                return fract(magic.z * fract(dot(uv, magic.xy)));
+              }
+              
+              // Function to create glow effect
+              float Interglow(in vec2 uv, in vec2 pos, in vec3 flex, in float power) {
+                vec2 uvd = uv * (length(uv)) * flex.xy;
+                float edge = (1.0 / (1.0 + flex.z * pow(length(uvd - pos), power)));
+                return clamp(edge, 0.0, 1.0);
+              }
+              
+              // Function to convert to black and white
+              vec3 blackAndWhite(vec3 color, float amount) {
+                float luminance = dot(color, vec3(0.299, 0.587, 0.114));
+                vec3 bw = vec3(luminance);
+                return mix(color, bw, amount);
+              }
+              
+              // Function to adjust saturation
+              vec3 adjustSaturation(vec3 color, float saturation) {
+                float luminance = dot(color, vec3(0.299, 0.587, 0.114));
+                return mix(vec3(luminance), color, saturation);
+              }
+              
+              void main() {
+                // Get coordinates
+                vec2 uv = vUv;
+                vec2 fragCoord = vUv * iResolution;
+                
+                // Use mouse position
+                vec2 mm = iMouse;
+                
+                // Noise for variation
+                float inz = InterleavedGradientNoise(fragCoord);
+                
+                // Streak parameters
+                float ano_clampW = streakLength;
+                float ano_clampH = streakHeight;
+                
+                // Base effect color - using white then tinting with color
+                vec3 baseColor = vec3(1.0, 1.0, 1.0);
+                
+                // Output color
+                vec3 outcol = vec3(0.0, 0.0, 0.0);
+                
+                // Create streak effect
+                {
+                  const vec2 A = sin(vec2(0.0, 2.2));
+                  const mat2 Ar = mat2(A, -A.y, A.x);
+                  vec2 U = uv;
+                  U -= mm.xy;
+                  U = (abs(U * Ar) * mat2(0.0, 0.0, ano_clampW, ano_clampH));
+                  float lfStreak = 0.15 / max(U.x, U.y);
+                  
+                  // Fade in based on distance from center
+                  float fadein = smoothstep(0.8, 1.0, 1.0 - (length(vec2(0.5, 0.5) - mm) * 2.0 * flareSize));
+                  
+                  float xt = smoothstep(0.0, 1.1, lfStreak);
+                  
+                  // Calculate base white/gray effect
+                  outcol = baseColor * xt * (fadein * fadein * 2.0 * intensity);
+                }
+                
+                // Add glow effects
+                float xr1 = Interglow(vec2(-0.5, -0.5) + uv, uv - mm, vec3(2.2, 1.5, 24.0 + inz), 1.25);
+                float xr2 = Interglow(vec2(-0.45, -0.55) + uv, uv - mm, vec3(4.2, 2.2, 28.0 + inz), 1.5);
+                float xr3 = Interglow(vec2(-0.53, -0.46) + uv, uv - mm, vec3(1.4, 4.6, 16.0 + inz), 1.1);
+                
+                // Add more glows using base white color
+                outcol += baseColor * xr1 * xr1 * colorIntensity;
+                outcol += baseColor * xr2 * colorIntensity * 0.7;
+                outcol += baseColor * pow(xr3 + (inz * 0.3335), glowPower) * colorIntensity;
+                
+                // AFTERWARDS we tint the whole effect with the primary color
+                // This ensures the effect takes the color properly
+                outcol *= primaryColor;
+                
+                // Apply saturation adjustment
+                outcol = adjustSaturation(outcol, saturation);
+                
+                // Apply black and white effect
+                outcol = blackAndWhite(outcol, contrastBW);
+                
+                // Clamp colors
+                outcol = clamp(outcol, 0.0, 1.0);
+                
+                // Invert colors if enabled
+                if (invert) {
+                  outcol = 1.0 - outcol;
+                }
+                
+                gl_FragColor = vec4(outcol, outcol.r + outcol.g + outcol.b);
+              }
+            `;
+
+        // Initialize uniforms for shader
+        const uniforms = {
+          iResolution: {
+            value: new THREE.Vector2(window.innerWidth, window.innerHeight)
+          },
+          iTime: { value: 0 },
+          iMouse: { value: new THREE.Vector2(0.5, 0.5) },
+          intensity: { value: settings.intensity },
+          streakLength: { value: settings.streakLength },
+          streakHeight: { value: settings.streakHeight },
+          glowPower: { value: settings.glowPower },
+          flareSize: { value: settings.flareSize },
+          colorIntensity: { value: settings.colorIntensity },
+          primaryColor: { value: new THREE.Vector3(0, 1, 0) }, // Pure green
+          secondaryColor: { value: new THREE.Vector3(0.4, 1, 0.4) }, // Light green
+          contrastBW: { value: settings.contrastBW },
+          saturation: { value: settings.saturation },
+          invert: { value: settings.invert }
+        };
+
+        // Create material and geometry
+        const geometry = new THREE.PlaneGeometry(2, 2);
+        const material = new THREE.ShaderMaterial({
+          vertexShader,
+          fragmentShader,
+          uniforms,
+          transparent: true
+        });
+
+        // Create mesh and add to scene
+        const plane = new THREE.Mesh(geometry, material);
+        scene.add(plane);
+
+        // Function to update colors based on selected scheme
+        function updateColors() {
+          const palette = colorPalettes[settings.colorScheme] || colorPalettes.green;
+
+          // Log the color being set
+          console.log(`Setting color scheme: ${settings.colorScheme}`, palette.primary);
+
+          // Update the uniforms with direct property assignment
+          uniforms.primaryColor.value.x = palette.primary[0];
+          uniforms.primaryColor.value.y = palette.primary[1];
+          uniforms.primaryColor.value.z = palette.primary[2];
+
+          uniforms.secondaryColor.value.x = palette.secondary[0];
+          uniforms.secondaryColor.value.y = palette.secondary[1];
+          uniforms.secondaryColor.value.z = palette.secondary[2];
+
+          // Force material update
+          material.needsUpdate = true;
+        }
+
+        // Make sure cursor is visible initially
+        cursor.style.opacity = "1";
+
+        // Handle mouse movement
+        document.addEventListener("mousemove", (e) => {
+          if (settings.useMousePosition) {
+            mouse.x = e.clientX / window.innerWidth;
+            mouse.y = 1.0 - e.clientY / window.innerHeight; // Flip Y
+          }
+
+          // Update custom cursor position
+          cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+
+          // Check if mouse is actually moving
+          if (e.clientX !== lastMouseX || e.clientY !== lastMouseY) {
+            lastMouseX = e.clientX;
+            lastMouseY = e.clientY;
+
+            // Update cursor state - active when moving
+            cursor.classList.add("active");
+            cursor.classList.remove("idle");
+            isMoving = true;
+
+            // Clear previous timeout
+            if (mouseMoveTimeout) {
+              clearTimeout(mouseMoveTimeout);
+            }
+
+            // Set timeout to detect when movement stops - slower to deactivate (500ms)
+            mouseMoveTimeout = setTimeout(() => {
+              isMoving = false;
+              cursor.classList.remove("active");
+              cursor.classList.add("idle");
+            }, 500); // 500ms without movement = idle
+          }
+        });
+
+        // Initialize cursor as visible but idle
+        window.addEventListener("load", () => {
+          cursor.classList.add("idle");
+          // Initial color update
+          updateColors();
+        });
+
+        // Handle window resize
+        window.addEventListener("resize", () => {
+          const width = window.innerWidth;
+          const height = window.innerHeight;
+
+          renderer.setSize(width, height);
+          uniforms.iResolution.value.set(width, height);
+        });
+
+        // GUI instance
+        let gui;
+
+        // Create GUI controls
+        function createGUI() {
+          gui = new GUI();
+
+          // Flare parameters
+          const flareFolder = gui.addFolder("Flare Settings");
+          flareFolder
+            .add(settings, "intensity", 0.1, 2.0)
+            .name("Flare Intensity")
+            .onChange(() => {
+              uniforms.intensity.value = settings.intensity;
+              material.needsUpdate = true;
+            });
+          flareFolder
+            .add(settings, "streakLength", 1.0, 50.0)
+            .name("Streak Length")
+            .onChange(() => {
+              uniforms.streakLength.value = settings.streakLength;
+              material.needsUpdate = true;
+            });
+          flareFolder
+            .add(settings, "streakHeight", 0.1, 2.0)
+            .name("Streak Height")
+            .onChange(() => {
+              uniforms.streakHeight.value = settings.streakHeight;
+              material.needsUpdate = true;
+            });
+          flareFolder
+            .add(settings, "glowPower", 0.5, 5.0)
+            .name("Glow Power")
+            .onChange(() => {
+              uniforms.glowPower.value = settings.glowPower;
+              material.needsUpdate = true;
+            });
+          flareFolder
+            .add(settings, "flareSize", 0.1, 3.0)
+            .name("Flare Size")
+            .onChange(() => {
+              uniforms.flareSize.value = settings.flareSize;
+              material.needsUpdate = true;
+            });
+          flareFolder.add(settings, "flareSpeed", 0.1, 5.0).name("Animation Speed");
+          flareFolder.open();
+
+          // Color parameters
+          const colorFolder = gui.addFolder("Color Settings");
+          colorFolder
+            .add(settings, "colorScheme", [
+              "original",
+              "blue",
+              "purple",
+              "fire",
+              "green",
+              "rainbow"
+            ])
+            .name("Color Scheme")
+            .onChange(() => {
+              updateColors();
+            });
+          colorFolder
+            .add(settings, "colorIntensity", 0.1, 0.5)
+            .name("Color Intensity")
+            .onChange(() => {
+              uniforms.colorIntensity.value = settings.colorIntensity;
+              material.needsUpdate = true;
+            });
+          colorFolder
+            .add(settings, "contrastBW", 0.0, 1.0)
+            .name("Black & White")
+            .onChange(() => {
+              uniforms.contrastBW.value = settings.contrastBW;
+              material.needsUpdate = true;
+            });
+          colorFolder
+            .add(settings, "saturation", 0.0, 2.0)
+            .name("Saturation")
+            .onChange(() => {
+              uniforms.saturation.value = settings.saturation;
+              material.needsUpdate = true;
+            });
+          colorFolder
+            .add(settings, "invert")
+            .name("Invert Colors")
+            .onChange(() => {
+              uniforms.invert.value = settings.invert;
+              material.needsUpdate = true;
+            });
+          colorFolder.open();
+
+          // Cursor and interaction
+          const cursorFolder = gui.addFolder("Cursor & Controls");
+          cursorFolder.add(settings, "useMousePosition").name("Use Mouse Position");
+          cursorFolder.add(settings, "cursorSize", 8, 40).name("Cursor Size");
+          cursorFolder.add(settings, "cursorIntensity", 0.1, 2.0).name("Cursor Glow");
+          cursorFolder.add(settings, "resetPosition").name("Reset Position");
+          cursorFolder.open();
+        }
+
+        // Initialize GUI
+        createGUI();
+
+        // Animation function
+        function animate() {
+          requestAnimationFrame(animate);
+
+          // Update cursor size based on settings
+          document.documentElement.style.setProperty(
+            "--cursor-size",
+            `${settings.cursorSize}px`
+          );
+
+          // Apply cursor glow effect
+          if (isMoving) {
+            cursor.style.boxShadow = `0 0 ${20 * settings.cursorIntensity}px ${
+              10 * settings.cursorIntensity
+            }px rgba(255, 255, 255, ${0.8 * settings.cursorIntensity})`;
+          } else {
+            cursor.style.boxShadow = "none";
+          }
+
+          // Update uniforms
+          uniforms.iTime.value += 0.01 * settings.flareSpeed;
+          uniforms.iMouse.value.set(mouse.x, mouse.y);
+
+          // Update FPS counter
+          frameCount++;
+          const currentTime = performance.now();
+          const deltaTime = currentTime - lastTime;
+
+          if (deltaTime >= 1000) {
+            const fps = Math.round((frameCount * 1000) / deltaTime);
+            fpsElement.textContent = `FPS: ${fps}`;
+            frameCount = 0;
+            lastTime = currentTime;
+          }
+
+          // Render scene
+          renderer.render(scene, camera);
+        }
+
+        // Start animation
+        animate();
+    </script>
+</body>
+</html>

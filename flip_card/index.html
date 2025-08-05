@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flip Card Template</title>
+
+  <!-- Optional icon fonts -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/material-icons@1.13.12/iconfont/material-icons.min.css" />
+
+  <style>
+    /* ==========  CUSTOMIZE HERE  ========== */
+    :root {
+      --accent: #e10657;
+      --bg: #111;
+      --surface: #1e1e1e;
+      --text: #f5f5f5;
+      --radius: 10px;
+      --transition: 0.6s ease;
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .auth-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    /* Toggle Button */
+    #flipToggle {
+      display: none;
+    }
+
+    .toggle-btn {
+      cursor: pointer;
+      background: var(--surface);
+      border-radius: 50px;
+      padding: 8px 24px;
+      font-weight: 600;
+      user-select: none;
+      transition: background var(--transition);
+    }
+
+    .toggle-btn:hover {
+      background: var(--accent);
+    }
+
+    .toggle-btn span::before {
+      content: "Log In";
+    }
+
+    #flipToggle:checked ~ .toggle-btn span::before {
+      content: "Sign Up";
+    }
+
+    /* Card Container */
+    .card-container {
+      width: 360px;
+      max-width: 90vw;
+      perspective: 1000px;
+    }
+
+    .card {
+      position: relative;
+      width: 100%;
+      height: 420px;
+      transform-style: preserve-3d;
+      transition: transform var(--transition);
+    }
+
+    #flipToggle:checked ~ .card-container .card {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 48px 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .card-back {
+      transform: rotateY(180deg);
+    }
+
+    .card-face h2 {
+      margin-bottom: 24px;
+      font-size: 1.75rem;
+    }
+
+    form label {
+      position: relative;
+      display: block;
+      margin-bottom: 20px;
+    }
+
+    form i.material-icons {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--accent);
+      font-size: 20px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px 14px 14px 44px;
+      border: none;
+      border-radius: var(--radius);
+      background: #2a2a2a;
+      color: var(--text);
+      font-size: 1rem;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: var(--radius);
+      background: var(--accent);
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      transition: filter var(--transition), transform var(--transition);
+    }
+
+    .btn:hover {
+      filter: brightness(1.1);
+      transform: translateY(-2px);
+    }
+
+    .link {
+      display: block;
+      margin-top: 12px;
+      text-align: center;
+      font-size: 0.875rem;
+      color: var(--text);
+      opacity: 0.7;
+    }
+
+    .link:hover {
+      opacity: 1;
+    }
+  </style>
+</head>
+
+<body>
+  <section class="auth-wrapper">
+    <!-- Hidden checkbox controls the flip -->
+    <input type="checkbox" id="flipToggle" />
+    <label for="flipToggle" class="toggle-btn">
+      <span></span>
+    </label>
+
+    <!-- Card -->
+    <div class="card-container">
+      <div class="card">
+        <!-- Front (Login) -->
+        <div class="card-face card-front">
+          <h2>Log In</h2>
+          <form>
+            <label>
+              <i class="material-icons">alternate_email</i>
+              <input type="email" placeholder="Email" required />
+            </label>
+            <label>
+              <i class="material-icons">lock</i>
+              <input type="password" placeholder="Password" required />
+            </label>
+            <button type="submit" class="btn">Log In</button>
+            <a href="#" class="link">Forgot your password?</a>
+          </form>
+        </div>
+
+        <!-- Back (Sign Up) -->
+        <div class="card-face card-back">
+          <h2>Sign Up</h2>
+          <form>
+            <label>
+              <i class="material-icons">person</i>
+              <input type="text" placeholder="Full Name" required />
+            </label>
+            <label>
+              <i class="material-icons">alternate_email</i>
+              <input type="email" placeholder="Email" required />
+            </label>
+            <label>
+              <i class="material-icons">lock</i>
+              <input type="password" placeholder="Password" required />
+            </label>
+            <button type="submit" class="btn">Sign Up</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

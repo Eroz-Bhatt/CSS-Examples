@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>NOSH Animation</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap');
+
+      body {
+        height: 100vh;
+        font-family: 'Poppins', sans-serif;
+        overflow: hidden;
+        background: black;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .nosh {
+        display: flex;
+        gap: 0.1em;
+      }
+
+      .nosh span {
+        display: inline-block;
+        color: #900c0c;
+        text-shadow: 0 0 15px rgba(144, 12, 12, 0.5);
+        font-size: 18vw;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        opacity: 0;
+        transform: translateY(-120%) skew(20deg);
+        animation: appear 8s infinite ease-in-out;
+      }
+
+      .nosh span:nth-child(1) {
+        animation-delay: 0s;
+      }
+
+      .nosh span:nth-child(2) {
+        animation-delay: 1s;
+      }
+
+      .nosh span:nth-child(3) {
+        animation-delay: 2s;
+      }
+
+      .nosh span:nth-child(4) {
+        animation-delay: 3s;
+      }
+
+      @keyframes appear {
+        0% {
+          opacity: 0;
+          transform: translateY(-120%) skew(20deg);
+        }
+        12.5% {
+          opacity: 1;
+          transform: translateY(0) skew(0deg);
+        }
+        37.5% {
+          opacity: 1;
+          transform: translateY(0) skew(0deg);
+        }
+        50% {
+          opacity: 0;
+          transform: translateY(120%) skew(-20deg);
+        }
+        100% {
+          opacity: 0;
+          transform: translateY(120%) skew(-20deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="nosh">
+      <span>N</span><span>O</span><span>S</span><span>H</span>
+    </div>
+  </body>
+</html>
