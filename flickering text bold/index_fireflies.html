@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>NOSH Professional Logo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700&display=swap" rel="stylesheet">
+    <style>
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+        body{
+            background:#000; 
+            color:#fff; 
+            font-family:'Barlow Condensed',Impact,sans-serif; 
+            display:flex; 
+            align-items:center; 
+            justify-content:center; 
+            height:100vh; 
+            overflow:hidden;
+        } 
+        .container{
+            position:relative; 
+            z-index:10; 
+            text-align:center; 
+            padding:40px;
+        } 
+        .logo{
+            font-size:18vw; 
+            font-weight:700; 
+            color:#900c0c; 
+            letter-spacing:3px; 
+            text-transform:uppercase; 
+            text-shadow:0 0 15px rgba(144,12,12,.5); 
+            transition:text-shadow .5s;
+        } 
+        .logo span{
+            display:inline-block; 
+            animation:flicker 2.5s infinite;
+        } 
+        .subtitle{
+            font-size:1.5rem; 
+            letter-spacing:8px; 
+            margin-top:20px; 
+            color:#aaa; 
+            text-transform:uppercase;
+        } 
+        .glow{
+            position:absolute; 
+            top:50%;left:50%; 
+            width:400px;height:400px; 
+            transform:translate(-50%,-50%); 
+            background:radial-gradient(circle,rgba(144,12,12,.3) 0%,transparent 70%); 
+            border-radius:50%; 
+            filter:blur(30px); 
+            animation:pulse 4s infinite; 
+            z-index:-1;
+        } 
+        .footer{
+            position:absolute; 
+            bottom:30px; 
+            font-size:.9rem; 
+            letter-spacing:1px; 
+            color:#444;
+        } 
+
+        /* Fireflies CSS */
+        .firefly {
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            width: 0.4vw;
+            height: 0.4vw;
+            margin: -0.2vw 0 0 9.8vw;
+            animation: ease 200s alternate infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .firefly::before, .firefly::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            transform-origin: -10vw;
+        }
+        .firefly::before {
+            background: black;
+            opacity: 0.4;
+            animation: drift ease alternate infinite;
+        }
+        .firefly::after {
+            background: #900c0c;
+            opacity: 0;
+            box-shadow: 0 0 0vw 0vw #900c0c;
+            animation: drift ease alternate infinite, flash-red ease infinite;
+        }
+
+        /* Individual firefly animations - Modified to avoid center area */
+        .firefly:nth-child(1) { animation-name: move1; }
+        .firefly:nth-child(1)::before { animation-duration: 12s; }
+        .firefly:nth-child(1)::after { animation-duration: 12s, 9500ms; animation-delay: 0ms, 3200ms; }
+        
+        .firefly:nth-child(2) { animation-name: move2; }
+        .firefly:nth-child(2)::before { animation-duration: 15s; }
+        .firefly:nth-child(2)::after { animation-duration: 15s, 7000ms; animation-delay: 0ms, 1500ms; }
+        
+        .firefly:nth-child(3) { animation-name: move3; }
+        .firefly:nth-child(3)::before { animation-duration: 9s; }
+        .firefly:nth-child(3)::after { animation-duration: 9s, 8500ms; animation-delay: 0ms, 4200ms; }
+        
+        .firefly:nth-child(4) { animation-name: move4; }
+        .firefly:nth-child(4)::before { animation-duration: 14s; }
+        .firefly:nth-child(4)::after { animation-duration: 14s, 10500ms; animation-delay: 0ms, 2800ms; }
+        
+        .firefly:nth-child(5) { animation-name: move5; }
+        .firefly:nth-child(5)::before { animation-duration: 11s; }
+        .firefly:nth-child(5)::after { animation-duration: 11s, 9000ms; animation-delay: 0ms, 5000ms; }
+        
+        .firefly:nth-child(6) { animation-name: move6; }
+        .firefly:nth-child(6)::before { animation-duration: 16s; }
+        .firefly:nth-child(6)::after { animation-duration: 16s, 6500ms; animation-delay: 0ms, 1800ms; }
+        
+        .firefly:nth-child(7) { animation-name: move7; }
+        .firefly:nth-child(7)::before { animation-duration: 10s; }
+        .firefly:nth-child(7)::after { animation-duration: 10s, 8000ms; animation-delay: 0ms, 3500ms; }
+        
+        .firefly:nth-child(8) { animation-name: move8; }
+        .firefly:nth-child(8)::before { animation-duration: 13s; }
+        .firefly:nth-child(8)::after { animation-duration: 13s, 7500ms; animation-delay: 0ms, 2500ms; }
+        
+        .firefly:nth-child(9) { animation-name: move9; }
+        .firefly:nth-child(9)::before { animation-duration: 17s; }
+        .firefly:nth-child(9)::after { animation-duration: 17s, 10000ms; animation-delay: 0ms, 4000ms; }
+        
+        .firefly:nth-child(10) { animation-name: move10; }
+        .firefly:nth-child(10)::before { animation-duration: 8s; }
+        .firefly:nth-child(10)::after { animation-duration: 8s, 5500ms; animation-delay: 0ms, 1000ms; }
+
+        /* Modified firefly movement keyframes - avoiding center area */
+        @keyframes move1 {
+            0% { transform: translateX(-30vw) translateY(-25vh) scale(0.8); }
+            25% { transform: translateX(-40vw) translateY(-35vh) scale(0.7); }
+            50% { transform: translateX(-45vw) translateY(-20vh) scale(0.95); }
+            75% { transform: translateX(-35vw) translateY(-40vh) scale(0.55); }
+            100% { transform: translateX(-30vw) translateY(-25vh) scale(0.8); }
+        }
+        
+        @keyframes move2 {
+            0% { transform: translateX(30vw) translateY(-25vh) scale(0.7); }
+            25% { transform: translateX(40vw) translateY(-35vh) scale(0.9); }
+            50% { transform: translateX(45vw) translateY(-20vh) scale(0.45); }
+            75% { transform: translateX(35vw) translateY(-40vh) scale(0.85); }
+            100% { transform: translateX(30vw) translateY(-25vh) scale(0.7); }
+        }
+
+        @keyframes move3 {
+            0% { transform: translateX(-30vw) translateY(25vh) scale(0.9); }
+            25% { transform: translateX(-40vw) translateY(35vh) scale(0.7); }
+            50% { transform: translateX(-45vw) translateY(20vh) scale(0.75); }
+            75% { transform: translateX(-35vw) translateY(40vh) scale(0.8); }
+            100% { transform: translateX(-30vw) translateY(25vh) scale(0.9); }
+        }
+
+        @keyframes move4 {
+            0% { transform: translateX(30vw) translateY(25vh) scale(0.6); }
+            25% { transform: translateX(40vw) translateY(35vh) scale(0.9); }
+            50% { transform: translateX(45vw) translateY(20vh) scale(0.7); }
+            75% { transform: translateX(35vw) translateY(40vh) scale(0.85); }
+            100% { transform: translateX(30vw) translateY(25vh) scale(0.6); }
+        }
+
+        @keyframes move5 {
+            0% { transform: translateX(-25vw) translateY(-40vh) scale(0.75); }
+            25% { transform: translateX(-35vw) translateY(-45vh) scale(0.75); }
+            50% { transform: translateX(-45vw) translateY(-35vh) scale(0.55); }
+            75% { transform: translateX(-30vw) translateY(-50vh) scale(0.85); }
+            100% { transform: translateX(-25vw) translateY(-40vh) scale(0.75); }
+        }
+
+        @keyframes move6 {
+            0% { transform: translateX(25vw) translateY(-40vh) scale(0.85); }
+            25% { transform: translateX(35vw) translateY(-45vh) scale(0.55); }
+            50% { transform: translateX(45vw) translateY(-35vh) scale(0.85); }
+            75% { transform: translateX(30vw) translateY(-50vh) scale(0.6); }
+            100% { transform: translateX(25vw) translateY(-40vh) scale(0.85); }
+        }
+
+        @keyframes move7 {
+            0% { transform: translateX(-25vw) translateY(40vh) scale(0.7); }
+            25% { transform: translateX(-35vw) translateY(45vh) scale(0.9); }
+            50% { transform: translateX(-45vw) translateY(35vh) scale(0.5); }
+            75% { transform: translateX(-30vw) translateY(50vh) scale(0.85); }
+            100% { transform: translateX(-25vw) translateY(40vh) scale(0.7); }
+        }
+
+        @keyframes move8 {
+            0% { transform: translateX(25vw) translateY(40vh) scale(0.55); }
+            25% { transform: translateX(35vw) translateY(45vh) scale(0.85); }
+            50% { transform: translateX(45vw) translateY(35vh) scale(0.55); }
+            75% { transform: translateX(30vw) translateY(50vh) scale(0.8); }
+            100% { transform: translateX(25vw) translateY(40vh) scale(0.55); }
+        }
+
+        @keyframes move9 {
+            0% { transform: translateX(-45vw) translateY(0vh) scale(0.9); }
+            25% { transform: translateX(-50vw) translateY(-15vh) scale(0.7); }
+            50% { transform: translateX(-50vw) translateY(15vh) scale(0.75); }
+            75% { transform: translateX(-45vw) translateY(-10vh) scale(0.8); }
+            100% { transform: translateX(-45vw) translateY(0vh) scale(0.9); }
+        }
+
+        @keyframes move10 {
+            0% { transform: translateX(45vw) translateY(0vh) scale(0.65); }
+            25% { transform: translateX(50vw) translateY(-15vh) scale(0.5); }
+            50% { transform: translateX(50vw) translateY(15vh) scale(0.8); }
+            75% { transform: translateX(45vw) translateY(-10vh) scale(0.75); }
+            100% { transform: translateX(45vw) translateY(0vh) scale(0.65); }
+        }
+
+        @keyframes drift {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes flash-red {
+            0%, 30%, 100% { opacity: 0; box-shadow: 0 0 0vw 0vw #900c0c; }
+            5% { opacity: 1; box-shadow: 0 0 2vw 0.4vw #900c0c; }
+        }
+
+        @keyframes flicker{
+            0%,19%,21%,23%,25%,54%,56%,100%{color:#900c0c;text-shadow:0 0 15px rgba(144,12,12,.5)} 
+            20%,24%,55%{color:rgba(144,12,12,.1);text-shadow:none}
+        } 
+        @keyframes pulse{
+            0%,100%{opacity:.3} 
+            50%{opacity:.5}
+        } 
+        @media(max-width:768px){
+            .logo{font-size:25vw} 
+            .subtitle{font-size:1.2rem;letter-spacing:5px}
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">N<span>O</span>SH</div>
+        <div class="subtitle">A Culinary Kitchen</div>
+    </div>
+    <div class="glow"></div>
+    <div class="footer">EST. 2012 | NEW YORK • LONDON • TOKYO</div>
+
+    <!-- Fireflies -->
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+</body>
+</html>
