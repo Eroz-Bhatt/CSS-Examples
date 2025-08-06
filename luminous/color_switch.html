@@ -1,357 +1,398 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Luminous Absence - Color Switch</title>
-    
+
     <!-- Font imports -->
-    <link href="https://fonts.googleapis.com/css2?family=Boldonse&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&display=swap" rel="stylesheet">
-    
+    <link
+      href="https://fonts.googleapis.com/css2?family=Boldonse&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&display=swap"
+      rel="stylesheet"
+    />
+
     <style>
-        :root {
-          --primary-font: "Boldonse", sans-serif;
-          --secondary-font: "Bodoni Moda", serif;
-          --primary-color: #e0e0e0;
-          --quote-size: 8vw;
-          --author-size: 1vw;
-        }
+      :root {
+        --primary-font: "Boldonse", sans-serif;
+        --secondary-font: "Bodoni Moda", serif;
+        --primary-color: #e0e0e0;
+        --quote-size: 8vw;
+        --author-size: 1vw;
+      }
 
-        * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        html, body {
-          width: 100%;
-          height: 100%;
-          overflow: hidden;
-          cursor: default; /* Normal cursor like version 2 */
-          background-color: #111;
-          letter-spacing: -0.03em;
-          position: relative;
-        }
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        cursor: default; /* Normal cursor like version 2 */
+        background-color: #111;
+        letter-spacing: -0.03em;
+        position: relative;
+      }
 
-        /* Background noise effect */
-        body::before {
-          content: "";
-          position: fixed;
-          top: -50%;
-          left: -50%;
-          width: 200%;
-          height: 200%;
-          background: transparent url("http://assets.iceable.com/img/noise-transparent.png") repeat 0 0;
-          background-size: 300px 300px;
-          animation: noise-animation 0.3s steps(5) infinite;
-          opacity: 1;
-          will-change: transform;
-          z-index: 100;
-          pointer-events: none;
-        }
+      /* Background noise effect */
+      body::before {
+        content: "";
+        position: fixed;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: transparent
+          url("http://assets.iceable.com/img/noise-transparent.png") repeat 0 0;
+        background-size: 300px 300px;
+        animation: noise-animation 0.3s steps(5) infinite;
+        opacity: 1;
+        will-change: transform;
+        z-index: 100;
+        pointer-events: none;
+      }
 
-        @keyframes noise-animation {
-          0% { transform: translate(0, 0); }
-          10% { transform: translate(-2%, -3%); }
-          20% { transform: translate(-4%, 2%); }
-          30% { transform: translate(2%, -4%); }
-          40% { transform: translate(-2%, 5%); }
-          50% { transform: translate(-4%, 2%); }
-          60% { transform: translate(3%, 0); }
-          70% { transform: translate(0, 3%); }
-          80% { transform: translate(-3%, 0); }
-          90% { transform: translate(2%, 2%); }
-          100% { transform: translate(1%, 0); }
+      @keyframes noise-animation {
+        0% {
+          transform: translate(0, 0);
         }
-
-        .content {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          z-index: 20;
-          padding: 20px;
-          text-align: center;
-          color: var(--primary-color);
+        10% {
+          transform: translate(-2%, -3%);
         }
-
-        .quote-container {
-          max-width: 90%;
-          overflow: hidden;
+        20% {
+          transform: translate(-4%, 2%);
         }
-
-        .quote {
-          font-family: var(--primary-font);
-          font-size: var(--quote-size);
-          line-height: 1.3;
-          font-weight: 400;
-          letter-spacing: -0.02em;
-          margin-bottom: 5vh;
-          opacity: 1;
-          text-transform: uppercase;
+        30% {
+          transform: translate(2%, -4%);
         }
-
-        .author {
-          font-family: var(--secondary-font);
-          font-size: var(--author-size);
-          font-style: italic;
-          opacity: 0.7;
-          margin-top: 2vh;
-          margin-bottom: 2vh;
+        40% {
+          transform: translate(-2%, 5%);
         }
-
-        .caption {
-          font-family: var(--secondary-font);
-          font-size: var(--author-size);
-          margin-bottom: 2vh;
+        50% {
+          transform: translate(-4%, 2%);
         }
-
-        canvas {
-          display: block;
-          position: fixed !important;
-          top: 0 !important;
-          left: 0 !important;
-          width: 100vw !important;
-          height: 100vh !important;
-          margin: 0 !important;
-          padding: 0 !important;
-          z-index: 2;
-          pointer-events: none;
+        60% {
+          transform: translate(3%, 0);
         }
+        70% {
+          transform: translate(0, 3%);
+        }
+        80% {
+          transform: translate(-3%, 0);
+        }
+        90% {
+          transform: translate(2%, 2%);
+        }
+        100% {
+          transform: translate(1%, 0);
+        }
+      }
 
-        /* Elegant Color Switch - Non-obtrusive and stylish */
+      .content {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 20;
+        padding: 20px;
+        text-align: center;
+        color: var(--primary-color);
+      }
+
+      .quote-container {
+        max-width: 90%;
+        overflow: hidden;
+      }
+
+      .quote {
+        font-family: var(--primary-font);
+        font-size: var(--quote-size);
+        line-height: 1.3;
+        font-weight: 400;
+        letter-spacing: -0.02em;
+        margin-bottom: 5vh;
+        opacity: 1;
+        text-transform: uppercase;
+      }
+
+      .author {
+        font-family: var(--secondary-font);
+        font-size: var(--author-size);
+        font-style: italic;
+        opacity: 0.7;
+        margin-top: 2vh;
+        margin-bottom: 2vh;
+      }
+
+      .caption {
+        font-family: var(--secondary-font);
+        font-size: var(--author-size);
+        margin-bottom: 2vh;
+      }
+
+      canvas {
+        display: block;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        z-index: 2;
+        pointer-events: none;
+      }
+
+      /* Elegant Color Switch - Non-obtrusive and stylish */
+      .color-switch {
+        position: fixed;
+        top: 30px;
+        right: 30px;
+        z-index: 101;
+        opacity: 0.3;
+        transition: all 0.3s ease;
+      }
+
+      .color-switch:hover {
+        opacity: 1;
+      }
+
+      .color-options {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 12px 8px;
+        background: rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(10px);
+        border-radius: 25px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .color-option {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        cursor: pointer;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+        position: relative;
+        background-size: cover;
+      }
+
+      .color-option::before {
+        content: "";
+        position: absolute;
+        top: -3px;
+        left: -3px;
+        right: -3px;
+        bottom: -3px;
+        border-radius: 50%;
+        border: 1px solid transparent;
+        transition: all 0.3s ease;
+      }
+
+      .color-option:hover {
+        transform: scale(1.2);
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+      }
+
+      .color-option.active::before {
+        border-color: rgba(255, 255, 255, 0.6);
+        box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+      }
+
+      .color-option.fire {
+        background: radial-gradient(circle, #ff6b35 0%, #ff4500 100%);
+      }
+      .color-option.blue {
+        background: radial-gradient(circle, #4da6ff 0%, #0066ff 100%);
+      }
+      .color-option.purple {
+        background: radial-gradient(circle, #b366ff 0%, #9933cc 100%);
+      }
+      .color-option.green {
+        background: radial-gradient(circle, #66ff66 0%, #00cc00 100%);
+      }
+      .color-option.rainbow {
+        background: conic-gradient(
+          from 0deg,
+          #ff0080,
+          #ff8000,
+          #ffff00,
+          #80ff00,
+          #00ff80,
+          #0080ff,
+          #8000ff,
+          #ff0080
+        );
+      }
+
+      /* Color switch label - subtle and elegant */
+      .color-switch::after {
+        content: "colors";
+        position: absolute;
+        right: 100%;
+        top: 50%;
+        transform: translateY(-50%);
+        margin-right: 12px;
+        font-family: var(--secondary-font);
+        font-size: 10px;
+        color: rgba(255, 255, 255, 0.4);
+        letter-spacing: 0.1em;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+      }
+
+      .color-switch:hover::after {
+        opacity: 1;
+      }
+
+      .profile-card {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px;
+        max-width: 300px;
+        width: 100%;
+        position: fixed;
+        bottom: 16px;
+        left: 16px;
+        z-index: 999;
+        color: var(--primary-color);
+      }
+
+      .profile-image {
+        flex-shrink: 0;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .profile-info {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .profile-name {
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      .profile-twitter {
+        font-size: 12px;
+        color: #71717a;
+      }
+
+      .profile-twitter a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .profile-twitter a:hover {
+        text-decoration: underline;
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
         .color-switch {
-          position: fixed;
-          top: 30px;
-          right: 30px;
-          z-index: 101;
-          opacity: 0.3;
-          transition: all 0.3s ease;
+          top: 20px;
+          right: 20px;
         }
 
-        .color-switch:hover {
-          opacity: 1;
-        }
-
-        .color-options {
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-          padding: 12px 8px;
-          background: rgba(0, 0, 0, 0.2);
-          backdrop-filter: blur(10px);
-          border-radius: 25px;
-          border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .color-option {
-          width: 12px;
-          height: 12px;
-          border-radius: 50%;
-          cursor: pointer;
-          border: 1px solid rgba(255, 255, 255, 0.2);
-          transition: all 0.3s ease;
-          position: relative;
-          background-size: cover;
-        }
-
-        .color-option::before {
-          content: '';
-          position: absolute;
-          top: -3px;
-          left: -3px;
-          right: -3px;
-          bottom: -3px;
-          border-radius: 50%;
-          border: 1px solid transparent;
-          transition: all 0.3s ease;
-        }
-
-        .color-option:hover {
-          transform: scale(1.2);
-          box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-        }
-
-        .color-option.active::before {
-          border-color: rgba(255, 255, 255, 0.6);
-          box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
-        }
-
-        .color-option.fire { 
-          background: radial-gradient(circle, #ff6b35 0%, #ff4500 100%); 
-        }
-        .color-option.blue { 
-          background: radial-gradient(circle, #4da6ff 0%, #0066ff 100%); 
-        }
-        .color-option.purple { 
-          background: radial-gradient(circle, #b366ff 0%, #9933cc 100%); 
-        }
-        .color-option.green { 
-          background: radial-gradient(circle, #66ff66 0%, #00cc00 100%); 
-        }
-        .color-option.rainbow { 
-          background: conic-gradient(from 0deg, #ff0080, #ff8000, #ffff00, #80ff00, #00ff80, #0080ff, #8000ff, #ff0080); 
-        }
-
-        /* Color switch label - subtle and elegant */
         .color-switch::after {
-          content: 'colors';
-          position: absolute;
-          right: 100%;
-          top: 50%;
-          transform: translateY(-50%);
-          margin-right: 12px;
-          font-family: var(--secondary-font);
-          font-size: 10px;
-          color: rgba(255, 255, 255, 0.4);
-          letter-spacing: 0.1em;
-          opacity: 0;
-          transition: opacity 0.3s ease;
-          pointer-events: none;
+          display: none;
         }
-
-        .color-switch:hover::after {
-          opacity: 1;
-        }
-
-        .profile-card {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          padding: 16px;
-          max-width: 300px;
-          width: 100%;
-          position: fixed;
-          bottom: 16px;
-          left: 16px;
-          z-index: 999;
-          color: var(--primary-color);
-        }
-
-        .profile-image {
-          flex-shrink: 0;
-          width: 28px;
-          height: 28px;
-          border-radius: 50%;
-          object-fit: cover;
-        }
-
-        .profile-info {
-          display: flex;
-          flex-direction: column;
-          gap: 2px;
-        }
-
-        .profile-name {
-          font-size: 14px;
-          font-weight: 500;
-        }
-
-        .profile-twitter {
-          font-size: 12px;
-          color: #71717a;
-        }
-
-        .profile-twitter a {
-          text-decoration: none;
-          color: inherit;
-        }
-
-        .profile-twitter a:hover {
-          text-decoration: underline;
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-          .color-switch {
-            top: 20px;
-            right: 20px;
-          }
-          
-          .color-switch::after {
-            display: none;
-          }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="content">
       <div class="quote-container">
         <div class="caption">Fragments of stardust, scattered across time.</div>
         <div class="quote">Luminous absence</div>
-        <div class="author">The light reveals what darkness conceals, but never explains</div>
+        <div class="author">
+          The light reveals what darkness conceals, but never explains
+        </div>
       </div>
     </div>
 
     <!-- Elegant, Non-obtrusive Color Switch -->
     <div class="color-switch">
       <div class="color-options">
-        <div class="color-option fire active" data-color="fire" title="Fire"></div>
+        <div
+          class="color-option fire active"
+          data-color="fire"
+          title="Fire"
+        ></div>
         <div class="color-option blue" data-color="blue" title="Ocean"></div>
-        <div class="color-option purple" data-color="purple" title="Mystic"></div>
+        <div
+          class="color-option purple"
+          data-color="purple"
+          title="Mystic"
+        ></div>
         <div class="color-option green" data-color="green" title="Nature"></div>
-        <div class="color-option rainbow" data-color="rainbow" title="Spectrum"></div>
-      </div>
-    </div>
-
-    <div class="profile-card">
-      <img class="profile-image" src="https://filip-zrnzevic-portfolio-2025-v3.vercel.app/_next/image?url=%2Fimages%2Fprofile003.jpg&w=48&q=75" alt="Filip Zrnzević">
-      <div class="profile-info">
-        <p class="profile-name">Filip Zrnzević</p>
-        <p class="profile-twitter">
-          <a href="https://x.com/filipz" target="_blank">@filipz</a>
-        </p>
+        <div
+          class="color-option rainbow"
+          data-color="rainbow"
+          title="Spectrum"
+        ></div>
       </div>
     </div>
 
     <script type="module">
-        import * as THREE from "https://esm.sh/three@0.175.0";
+      import * as THREE from "https://esm.sh/three@0.175.0";
 
-        // Color palettes
-        const colorPalettes = {
-          fire: {
-            primary: [1.0, 0.3, 0.0],
-            secondary: [1.0, 0.6, 0.2]
-          },
-          blue: {
-            primary: [0.0, 0.0, 1.0],
-            secondary: [0.4, 0.4, 1.0]
-          },
-          purple: {
-            primary: [0.6, 0.0, 0.8],
-            secondary: [0.8, 0.3, 1.0]
-          },
-          green: {
-            primary: [0.0, 1.0, 0.0],
-            secondary: [0.4, 1.0, 0.4]
-          },
-          rainbow: {
-            primary: [1.0, 0.0, 1.0],
-            secondary: [0.0, 1.0, 1.0]
-          }
-        };
+      // Color palettes
+      const colorPalettes = {
+        fire: {
+          primary: [1.0, 0.3, 0.0],
+          secondary: [1.0, 0.6, 0.2],
+        },
+        blue: {
+          primary: [0.0, 0.0, 1.0],
+          secondary: [0.4, 0.4, 1.0],
+        },
+        purple: {
+          primary: [0.6, 0.0, 0.8],
+          secondary: [0.8, 0.3, 1.0],
+        },
+        green: {
+          primary: [0.0, 1.0, 0.0],
+          secondary: [0.4, 1.0, 0.4],
+        },
+        rainbow: {
+          primary: [1.0, 0.0, 1.0],
+          secondary: [0.0, 1.0, 1.0],
+        },
+      };
 
-        let currentColor = "fire";
+      let currentColor = "fire";
 
-        // Initialize Three.js
-        const scene = new THREE.Scene();
-        const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
-        camera.position.z = 1;
+      // Initialize Three.js
+      const scene = new THREE.Scene();
+      const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
+      camera.position.z = 1;
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(renderer.domElement);
+      const renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
 
-        // Mouse tracking
-        const mouse = new THREE.Vector2(0.5, 0.5);
+      // Mouse tracking
+      const mouse = new THREE.Vector2(0.5, 0.5);
 
-        // Shader code (same as original but simplified)
-        const vertexShader = `
+      // Shader code (same as original but simplified)
+      const vertexShader = `
               varying vec2 vUv;
               void main() {
                 vUv = uv;
@@ -359,7 +400,7 @@
               }
             `;
 
-        const fragmentShader = `
+      const fragmentShader = `
               uniform vec2 iResolution;
               uniform float iTime;
               uniform vec2 iMouse;
@@ -430,84 +471,88 @@
               }
             `;
 
-        // Initialize uniforms
-        const uniforms = {
-          iResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
-          iTime: { value: 0 },
-          iMouse: { value: new THREE.Vector2(0.5, 0.5) },
-          intensity: { value: 1.09 },
-          streakLength: { value: 48 },
-          streakHeight: { value: 0.23 },
-          glowPower: { value: 2.75 },
-          flareSize: { value: 1.52 },
-          colorIntensity: { value: 0.5 },
-          primaryColor: { value: new THREE.Vector3(1.0, 0.3, 0.0) },
-          secondaryColor: { value: new THREE.Vector3(1.0, 0.6, 0.2) },
-          saturation: { value: 2.0 }
-        };
+      // Initialize uniforms
+      const uniforms = {
+        iResolution: {
+          value: new THREE.Vector2(window.innerWidth, window.innerHeight),
+        },
+        iTime: { value: 0 },
+        iMouse: { value: new THREE.Vector2(0.5, 0.5) },
+        intensity: { value: 1.09 },
+        streakLength: { value: 48 },
+        streakHeight: { value: 0.23 },
+        glowPower: { value: 2.75 },
+        flareSize: { value: 1.52 },
+        colorIntensity: { value: 0.5 },
+        primaryColor: { value: new THREE.Vector3(1.0, 0.3, 0.0) },
+        secondaryColor: { value: new THREE.Vector3(1.0, 0.6, 0.2) },
+        saturation: { value: 2.0 },
+      };
 
-        // Create material and geometry
-        const geometry = new THREE.PlaneGeometry(2, 2);
-        const material = new THREE.ShaderMaterial({
-          vertexShader,
-          fragmentShader,
-          uniforms,
-          transparent: true
+      // Create material and geometry
+      const geometry = new THREE.PlaneGeometry(2, 2);
+      const material = new THREE.ShaderMaterial({
+        vertexShader,
+        fragmentShader,
+        uniforms,
+        transparent: true,
+      });
+
+      const plane = new THREE.Mesh(geometry, material);
+      scene.add(plane);
+
+      // Color switching functionality
+      function updateColors() {
+        const palette = colorPalettes[currentColor];
+        uniforms.primaryColor.value.x = palette.primary[0];
+        uniforms.primaryColor.value.y = palette.primary[1];
+        uniforms.primaryColor.value.z = palette.primary[2];
+
+        uniforms.secondaryColor.value.x = palette.secondary[0];
+        uniforms.secondaryColor.value.y = palette.secondary[1];
+        uniforms.secondaryColor.value.z = palette.secondary[2];
+
+        material.needsUpdate = true;
+      }
+
+      // Color switch event listeners with smooth transitions
+      document.querySelectorAll(".color-option").forEach((option) => {
+        option.addEventListener("click", (e) => {
+          e.stopPropagation();
+          document
+            .querySelectorAll(".color-option")
+            .forEach((opt) => opt.classList.remove("active"));
+          option.classList.add("active");
+          currentColor = option.dataset.color;
+          updateColors();
         });
+      });
 
-        const plane = new THREE.Mesh(geometry, material);
-        scene.add(plane);
+      // Handle mouse movement
+      document.addEventListener("mousemove", (e) => {
+        mouse.x = e.clientX / window.innerWidth;
+        mouse.y = 1.0 - e.clientY / window.innerHeight;
+      });
 
-        // Color switching functionality
-        function updateColors() {
-          const palette = colorPalettes[currentColor];
-          uniforms.primaryColor.value.x = palette.primary[0];
-          uniforms.primaryColor.value.y = palette.primary[1];
-          uniforms.primaryColor.value.z = palette.primary[2];
-          
-          uniforms.secondaryColor.value.x = palette.secondary[0];
-          uniforms.secondaryColor.value.y = palette.secondary[1];
-          uniforms.secondaryColor.value.z = palette.secondary[2];
-          
-          material.needsUpdate = true;
-        }
+      // Handle window resize
+      window.addEventListener("resize", () => {
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        renderer.setSize(width, height);
+        uniforms.iResolution.value.set(width, height);
+      });
 
-        // Color switch event listeners with smooth transitions
-        document.querySelectorAll('.color-option').forEach(option => {
-          option.addEventListener('click', (e) => {
-            e.stopPropagation();
-            document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('active'));
-            option.classList.add('active');
-            currentColor = option.dataset.color;
-            updateColors();
-          });
-        });
+      // Animation loop
+      function animate() {
+        requestAnimationFrame(animate);
+        uniforms.iTime.value += 0.01;
+        uniforms.iMouse.value.set(mouse.x, mouse.y);
+        renderer.render(scene, camera);
+      }
 
-        // Handle mouse movement
-        document.addEventListener("mousemove", (e) => {
-          mouse.x = e.clientX / window.innerWidth;
-          mouse.y = 1.0 - e.clientY / window.innerHeight;
-        });
-
-        // Handle window resize
-        window.addEventListener("resize", () => {
-          const width = window.innerWidth;
-          const height = window.innerHeight;
-          renderer.setSize(width, height);
-          uniforms.iResolution.value.set(width, height);
-        });
-
-        // Animation loop
-        function animate() {
-          requestAnimationFrame(animate);
-          uniforms.iTime.value += 0.01;
-          uniforms.iMouse.value.set(mouse.x, mouse.y);
-          renderer.render(scene, camera);
-        }
-
-        // Initialize
-        updateColors();
-        animate();
+      // Initialize
+      updateColors();
+      animate();
     </script>
-</body>
+  </body>
 </html>
