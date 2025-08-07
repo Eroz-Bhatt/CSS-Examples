@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile-Responsive Infinite Loop Gallery</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:wght@400;700&display=swap");
+        
+        :root {
+            --color-bg: #0a0a0a;
+            --color-card-bg: #161616;
+            --color-accent: #ff2c2c;
+            --color-text: #f5f5f5;
+            --color-text-muted: rgba(245, 245, 245, 0.7);
+            --color-border: rgba(255, 255, 255, 0.1);
+            
+            --font-primary: "Inter", sans-serif;
+            --font-display: "Playfair Display", serif;
+            
+            /* Responsive variables */
+            --card-width: 300px;
+            --card-height: 400px;
+            --gallery-height: 500px;
+            --container-padding: 2rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            background: var(--color-bg);
+            color: var(--color-text);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .gallery-section {
+            min-height: 100vh;
+            min-height: 100dvh; /* Dynamic viewport height for mobile */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--container-padding);
+            background: radial-gradient(ellipse at center, var(--color-card-bg) 0%, var(--color-bg) 70%);
+        }
+
+        .gallery-title {
+            text-align: center;
+            margin-bottom: clamp(2rem, 8vw, 4rem);
+        }
+
+        .gallery-title h2 {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 6vw, 3rem);
+            margin-bottom: clamp(0.5rem, 3vw, 1rem);
+            color: var(--color-text);
+            line-height: 1.2;
+        }
+
+        .gallery-title p {
+            color: var(--color-text-muted);
+            font-size: clamp(0.9rem, 3vw, 1.1rem);
+            max-width: 90%;
+            margin: 0 auto;
+        }
+
+        .gallery-container {
+            position: relative;
+            width: 100%;
+            max-width: 1000px;
+            height: var(--gallery-height);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            touch-action: pan-y; /* Allow vertical scroll but enable horizontal gestures */
+        }
+
+        .gallery-track {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            perspective: 1200px;
+        }
+
+        .gallery-card {
+            position: absolute;
+            width: var(--card-width);
+            height: var(--card-height);
+            background-size: cover;
+            background-position: center;
+            border-radius: clamp(12px, 3vw, 20px);
+            cursor: pointer;
+            transition: all 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border: 2px solid var(--color-border);
+            overflow: hidden;
+            top: 50px;
+            will-change: transform, opacity;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+        }
+
+        /* Desktop positioning */
+        .gallery-card.pos-neg-2 {
+            left: -400px;
+            transform: scale(0.5) rotateY(60deg);
+            opacity: 0;
+            z-index: 0;
+        }
+
+        .gallery-card.pos-neg-1 {
+            left: -200px;
+            transform: scale(0.6) rotateY(45deg);
+            opacity: 0.3;
+            z-index: 1;
+        }
+
+        .gallery-card.pos-0 {
+            left: 100px;
+            transform: scale(0.8) rotateY(25deg);
+            opacity: 0.6;
+            z-index: 2;
+        }
+
+        .gallery-card.pos-1 {
+            left: 350px;
+            transform: scale(1) rotateY(0deg);
+            opacity: 1;
+            z-index: 5;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .gallery-card.pos-2 {
+            left: 600px;
+            transform: scale(0.8) rotateY(-25deg);
+            opacity: 0.6;
+            z-index: 2;
+        }
+
+        .gallery-card.pos-3 {
+            left: 900px;
+            transform: scale(0.6) rotateY(-45deg);
+            opacity: 0.3;
+            z-index: 1;
+        }
+
+        .gallery-card.pos-4 {
+            left: 1200px;
+            transform: scale(0.5) rotateY(-60deg);
+            opacity: 0;
+            z-index: 0;
+        }
+
+        /* Card content */
+        .card-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+            padding: clamp(1rem, 4vw, 2rem) clamp(0.8rem, 3vw, 1.5rem);
+            border-radius: 0 0 clamp(12px, 3vw, 20px) clamp(12px, 3vw, 20px);
+            transform: translateY(100%);
+            transition: transform 0.4s ease 0.2s;
+        }
+
+        .gallery-card.pos-1 .card-content {
+            transform: translateY(0);
+        }
+
+        .card-content h3 {
+            font-family: var(--font-display);
+            font-size: clamp(1rem, 4vw, 1.4rem);
+            margin-bottom: clamp(0.3rem, 1.5vw, 0.5rem);
+            color: var(--color-text);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.3;
+        }
+
+        .card-content p {
+            color: var(--color-text-muted);
+            font-size: clamp(0.75rem, 2.5vw, 0.9rem);
+            line-height: 1.4;
+            margin-bottom: clamp(0.5rem, 2vw, 1rem);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-meta {
+            display: flex;
+            gap: clamp(0.5rem, 2vw, 1rem);
+            font-size: clamp(0.6rem, 2vw, 0.75rem);
+            color: var(--color-accent);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            flex-wrap: wrap;
+        }
+
+        /* Controls */
+        .gallery-controls {
+            margin-top: clamp(2rem, 6vw, 3rem);
+            display: flex;
+            gap: clamp(1rem, 4vw, 2rem);
+            z-index: 10;
+        }
+
+        .gallery-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid var(--color-border);
+            color: var(--color-text);
+            width: clamp(50px, 12vw, 60px);
+            height: clamp(50px, 12vw, 60px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: clamp(1.2rem, 4vw, 1.5rem);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            touch-action: manipulation; /* Prevent double-tap zoom */
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .gallery-btn:hover {
+            background: rgba(255, 44, 44, 0.2);
+            border-color: var(--color-accent);
+            transform: translateY(-2px);
+        }
+
+        .gallery-btn:active {
+            transform: translateY(0);
+            background: rgba(255, 44, 44, 0.3);
+        }
+
+        /* Progress dots */
+        .gallery-progress {
+            margin-top: clamp(1rem, 4vw, 2rem);
+            display: flex;
+            gap: clamp(0.3rem, 1.5vw, 0.5rem);
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 100%;
+        }
+
+        .progress-dot {
+            width: clamp(8px, 2.5vw, 10px);
+            height: clamp(8px, 2.5vw, 10px);
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .progress-dot.active {
+            background: var(--color-accent);
+            transform: scale(1.2);
+        }
+
+        .progress-dot:hover {
+            background: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Tablet responsiveness */
+        @media (max-width: 1024px) {
+            :root {
+                --card-width: 280px;
+                --card-height: 380px;
+                --gallery-height: 450px;
+            }
+            
+            .gallery-card.pos-neg-2,
+            .gallery-card.pos-4 {
+                display: none;
+            }
+
+            .gallery-card.pos-neg-1 {
+                left: -220px;
+                transform: scale(0.65) rotateY(35deg);
+            }
+
+            .gallery-card.pos-0 {
+                left: 50px;
+                transform: scale(0.8) rotateY(18deg);
+            }
+
+            .gallery-card.pos-1 {
+                left: 270px;
+            }
+
+            .gallery-card.pos-2 {
+                left: 490px;
+                transform: scale(0.8) rotateY(-18deg);
+            }
+
+            .gallery-card.pos-3 {
+                left: 710px;
+                transform: scale(0.65) rotateY(-35deg);
+            }
+        }
+
+        /* Mobile landscape */
+        @media (max-width: 768px) and (orientation: landscape) {
+            :root {
+                --card-width: 220px;
+                --card-height: 300px;
+                --gallery-height: 350px;
+                --container-padding: 1rem;
+            }
+
+            .gallery-section {
+                padding: 1rem 0.5rem;
+            }
+
+            .gallery-card.pos-neg-2,
+            .gallery-card.pos-3,
+            .gallery-card.pos-4 {
+                display: none;
+            }
+
+            .gallery-card.pos-neg-1 {
+                left: -150px;
+                transform: scale(0.7) rotateY(25deg);
+            }
+
+            .gallery-card.pos-0 {
+                left: 20px;
+                transform: scale(0.85) rotateY(12deg);
+            }
+
+            .gallery-card.pos-1 {
+                left: 200px;
+            }
+
+            .gallery-card.pos-2 {
+                left: 380px;
+                transform: scale(0.85) rotateY(-12deg);
+            }
+        }
+
+        /* Mobile portrait */
+        @media (max-width: 768px) and (orientation: portrait) {
+            :root {
+                --card-width: 260px;
+                --card-height: 350px;
+                --gallery-height: 400px;
+                --container-padding: 1rem;
+            }
+
+            .gallery-section {
+                padding: 1rem;
+                justify-content: space-evenly;
+            }
+
+            .gallery-card.pos-neg-2,
+            .gallery-card.pos-3,
+            .gallery-card.pos-4 {
+                display: none;
+            }
+
+            .gallery-card.pos-neg-1 {
+                left: -180px;
+                transform: scale(0.7) rotateY(30deg);
+                opacity: 0.4;
+            }
+
+            .gallery-card.pos-0 {
+                left: 20px;
+                transform: scale(0.85) rotateY(15deg);
+            }
+
+            .gallery-card.pos-1 {
+                left: 200px;
+            }
+
+            .gallery-card.pos-2 {
+                left: 380px;
+                transform: scale(0.85) rotateY(-15deg);
+            }
+        }
+
+        /* Small mobile devices */
+        @media (max-width: 480px) {
+            :root {
+                --card-width: 200px;
+                --card-height: 280px;
+                --gallery-height: 320px;
+                --container-padding: 0.5rem;
+            }
+
+            .gallery-section {
+                padding: 0.5rem;
+                min-height: 100vh;
+            }
+
+            .gallery-card.pos-neg-1,
+            .gallery-card.pos-2 {
+                opacity: 0.2;
+            }
+
+            .gallery-card.pos-neg-1 {
+                left: -120px;
+                transform: scale(0.6) rotateY(35deg);
+            }
+
+            .gallery-card.pos-0 {
+                left: 10px;
+                transform: scale(0.8) rotateY(20deg);
+            }
+
+            .gallery-card.pos-1 {
+                left: 140px;
+            }
+
+            .gallery-card.pos-2 {
+                left: 270px;
+                transform: scale(0.8) rotateY(-20deg);
+            }
+
+            .gallery-controls {
+                margin-top: 1.5rem;
+                gap: 1.5rem;
+            }
+
+            .progress-dot {
+                margin: 0 2px;
+            }
+        }
+
+        /* Extra small devices */
+        @media (max-width: 320px) {
+            :root {
+                --card-width: 160px;
+                --card-height: 240px;
+                --gallery-height: 280px;
+            }
+
+            .gallery-card.pos-0 {
+                left: 0px;
+            }
+
+            .gallery-card.pos-1 {
+                left: 80px;
+            }
+
+            .gallery-card.pos-2 {
+                left: 160px;
+            }
+        }
+
+        /* Touch-specific improvements */
+        @media (hover: none) and (pointer: coarse) {
+            .gallery-btn:hover {
+                background: rgba(255, 255, 255, 0.1);
+                border-color: var(--color-border);
+                transform: none;
+            }
+
+            .gallery-card {
+                cursor: default;
+            }
+
+            .progress-dot:hover {
+                background: rgba(255, 255, 255, 0.3);
+            }
+
+            /* Larger touch targets */
+            .gallery-btn {
+                min-width: 44px;
+                min-height: 44px;
+            }
+
+            .progress-dot {
+                min-width: 44px;
+                min-height: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .progress-dot::before {
+                content: '';
+                width: clamp(8px, 2.5vw, 10px);
+                height: clamp(8px, 2.5vw, 10px);
+                border-radius: 50%;
+                background: currentColor;
+            }
+        }
+
+        /* Reduce motion for accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            .gallery-card {
+                transition: opacity 0.3s ease, transform 0.3s ease;
+            }
+
+            .card-content {
+                transition: transform 0.3s ease;
+            }
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            :root {
+                --color-border: rgba(255, 255, 255, 0.3);
+                --color-accent: #ff4444;
+            }
+
+            .gallery-btn {
+                border-width: 3px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="gallery-section">
+        <div class="gallery-title">
+            <h2>Featured Works</h2>
+            <p>Navigate through our curated selection</p>
+        </div>
+        
+        <div class="gallery-container">
+            <div class="gallery-track">
+                <div class="gallery-card" style="background-image: url('https://assets.codepen.io/16327/portrait-number-01.png')">
+                    <div class="card-content">
+                        <h3>Modern Portrait</h3>
+                        <p>Contemporary human expressions captured in stunning detail</p>
+                        <div class="card-meta">
+                            <span>2024</span>
+                            <span>Portrait</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="gallery-card" style="background-image: url('https://assets.codepen.io/16327/portrait-number-02.png')">
+                    <div class="card-content">
+                        <h3>Urban Stories</h3>
+                        <p>Street photography narrative capturing life in motion</p>
+                        <div class="card-meta">
+                            <span>2024</span>
+                            <span>Street</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="gallery-card" style="background-image: url('https://assets.codepen.io/16327/portrait-number-03.png')">
+                    <div class="card-content">
+                        <h3>Natural Forms</h3>
+                        <p>Organic shapes and textures found in nature</p>
+                        <div class="card-meta">
+                            <span>2024</span>
+                            <span>Nature</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="gallery-card" style="background-image: url('https://assets.codepen.io/16327/portrait-number-04.png')">
+                    <div class="card-content">
+                        <h3>Intimate Moments</h3>
+                        <p>Personal documentary series exploring connections</p>
+                        <div class="card-meta">
+                            <span>2024</span>
+                            <span>Documentary</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="gallery-card" style="background-image: url('https://assets.codepen.io/16327/portrait-number-05.png')">
+                    <div class="card-content">
+                        <h3>Experimental Art</h3>
+                        <p>Digital manipulation series pushing boundaries</p>
+                        <div class="card-meta">
+                            <span>2024</span>
+                            <span>Digital</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="gallery-card" style="background-image: url('https://assets.codepen.io/16327/portrait-number-06.png')">
+                    <div class="card-content">
+                        <h3>Timeless Beauty</h3>
+                        <p>Classic portraiture collection showcasing elegance</p>
+                        <div class="card-meta">
+                            <span>2024</span>
+                            <span>Photography</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="gallery-card" style="background-image: url('https://assets.codepen.io/16327/portrait-number-07.png')">
+                    <div class="card-content">
+                        <h3>Abstract Vision</h3>
+                        <p>Contemporary visual exploration of form and color</p>
+                        <div class="card-meta">
+                            <span>2024</span>
+                            <span>Mixed Media</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="gallery-controls">
+            <button class="gallery-btn" id="prevBtn" aria-label="Previous image">‹</button>
+            <button class="gallery-btn" id="nextBtn" aria-label="Next image">›</button>
+        </div>
+        
+        <div class="gallery-progress" id="progressDots"></div>
+    </section>
+
+    <script>
+        class MobileResponsiveGallery {
+            constructor() {
+                this.cards = Array.from(document.querySelectorAll('.gallery-card'));
+                this.currentIndex = 0;
+                this.totalCards = this.cards.length;
+                this.isAnimating = false;
+                this.startX = 0;
+                this.startY = 0;
+                this.isTouch = false;
+                
+                this.init();
+            }
+
+            init() {
+                this.createProgressDots();
+                this.updateGallery();
+                this.bindEvents();
+                this.addTouchSupport();
+            }
+
+            createProgressDots() {
+                const container = document.getElementById('progressDots');
+                container.innerHTML = '';
+                
+                for (let i = 0; i < this.totalCards; i++) {
+                    const dot = document.createElement('div');
+                    dot.className = 'progress-dot';
+                    if (i === this.currentIndex) {
+                        dot.classList.add('active');
+                    }
+                    dot.addEventListener('click', () => this.goToSlide(i));
+                    container.appendChild(dot);
+                }
+            }
+
+            updateGallery() {
+                this.cards.forEach((card, index) => {
+                    card.className = 'gallery-card';
+                    
+                    let relativePosition = index - this.currentIndex;
+                    
+                    if (relativePosition > this.totalCards / 2) {
+                        relativePosition -= this.totalCards;
+                    } else if (relativePosition < -this.totalCards / 2) {
+                        relativePosition += this.totalCards;
+                    }
+                    
+                    if (relativePosition === -2) {
+                        card.classList.add('pos-neg-2');
+                    } else if (relativePosition === -1) {
+                        card.classList.add('pos-neg-1');
+                    } else if (relativePosition === 0) {
+                        card.classList.add('pos-0');
+                    } else if (relativePosition === 1) {
+                        card.classList.add('pos-1');
+                    } else if (relativePosition === 2) {
+                        card.classList.add('pos-2');
+                    } else if (relativePosition === 3) {
+                        card.classList.add('pos-3');
+                    } else {
+                        card.classList.add('pos-4');
+                    }
+                });
+
+                document.querySelectorAll('.progress-dot').forEach((dot, index) => {
+                    dot.classList.toggle('active', index === this.currentIndex);
+                });
+            }
+
+            next() {
+                if (this.isAnimating) return;
+                
+                this.isAnimating = true;
+                this.currentIndex = (this.currentIndex + 1) % this.totalCards;
+                this.updateGallery();
+                
+                setTimeout(() => {
+                    this.isAnimating = false;
+                }, 800);
+            }
+
+            prev() {
+                if (this.isAnimating) return;
+                
+                this.isAnimating = true;
+                this.currentIndex = (this.currentIndex - 1 + this.totalCards) % this.totalCards;
+                this.updateGallery();
+                
+                setTimeout(() => {
+                    this.isAnimating = false;
+                }, 800);
+            }
+
+            goToSlide(index) {
+                if (this.isAnimating || index === this.currentIndex) return;
+                
+                this.isAnimating = true;
+                this.currentIndex = index;
+                this.updateGallery();
+                
+                setTimeout(() => {
+                    this.isAnimating = false;
+                }, 800);
+            }
+
+            addTouchSupport() {
+                const container = document.querySelector('.gallery-container');
+                
+                // Touch events
+                container.addEventListener('touchstart', (e) => {
+                    this.startX = e.touches[0].clientX;
+                    this.startY = e.touches[0].clientY;
+                    this.isTouch = true;
+                }, { passive: true });
+
+                container.addEventListener('touchmove', (e) => {
+                    if (!this.isTouch) return;
+                    
+                    const currentX = e.touches[0].clientX;
+                    const currentY = e.touches[0].clientY;
+                    const diffX = this.startX - currentX;
+                    const diffY = this.startY - currentY;
+                    
+                    // Only prevent default for horizontal swipes
+                    if (Math.abs(diffX) > Math.abs(diffY)) {
+                        e.preventDefault();
+                    }
+                }, { passive: false });
+
+                container.addEventListener('touchend', (e) => {
+                    if (!this.isTouch) return;
+                    
+                    const endX = e.changedTouches[0].clientX;
+                    const endY = e.changedTouches[0].clientY;
+                    const diffX = this.startX - endX;
+                    const diffY = this.startY - endY;
+                    
+                    // Check if horizontal swipe is stronger than vertical
+                    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+                        if (diffX > 0) {
+                            this.next();
+                        } else {
+                            this.prev();
+                        }
+                    }
+                    
+                    this.isTouch = false;
+                    this.startX = 0;
+                    this.startY = 0;
+                }, { passive: true });
+
+                // Mouse events for desktop
+                container.addEventListener('mousedown', (e) => {
+                    this.startX = e.clientX;
+                    this.startY = e.clientY;
+                });
+
+                container.addEventListener('mouseup', (e) => {
+                    const endX = e.clientX;
+                    const endY = e.clientY;
+                    const diffX = this.startX - endX;
+                    const diffY = this.startY - endY;
+                    
+                    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+                        if (diffX > 0) {
+                            this.next();
+                        } else {
+                            this.prev();
+                        }
+                    }
+                });
+            }
+
+            bindEvents() {
+                document.getElementById('prevBtn').addEventListener('click', () => this.prev());
+                document.getElementById('nextBtn').addEventListener('click', () => this.next());
+
+                // Keyboard navigation
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowLeft') {
+                        e.preventDefault();
+                        this.prev();
+                    }
+                    if (e.key === 'ArrowRight') {
+                        e.preventDefault();
+                        this.next();
+                    }
+                });
+
+                // Card click navigation
+                this.cards.forEach((card, index) => {
+                    card.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const clickedCardIndex = this.cards.indexOf(card);
+                        
+                        if (clickedCardIndex !== this.currentIndex) {
+                            this.goToSlide(clickedCardIndex);
+                        }
+                    });
+                });
+
+                // Handle orientation change
+                window.addEventListener('orientationchange', () => {
+                    setTimeout(() => {
+                        this.updateGallery();
+                    }, 300);
+                });
+
+                // Handle window resize
+                let resizeTimeout;
+                window.addEventListener('resize', () => {
+                    clearTimeout(resizeTimeout);
+                    resizeTimeout = setTimeout(() => {
+                        this.updateGallery();
+                    }, 150);
+                });
+            }
+        }
+
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            new MobileResponsiveGallery();
+        });
+    </script>
+</body>
+</html>

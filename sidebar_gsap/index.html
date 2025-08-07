@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS-Only Sidebar</title>
+    <style>
+        @font-face {
+            font-family: 'PP Neue Corp Tight';
+            src: url('https://cdn.prod.website-files.com/673af51dea86ab95d124c3ee/673b0f5784f7060c0ac05534_PPNeueCorp-TightUltrabold.otf') format('opentype');
+            font-weight: 700;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'PP Neue Montreal';
+            src: url('https://cdn.prod.website-files.com/6819ed8312518f61b84824df/6819ed8312518f61b84825ba_PPNeueMontreal-Medium.woff2') format('woff2');
+            font-weight: 500;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        :root {
+            --color-primary: #ff6b35;
+            --color-neutral-100: #f5f5f5;
+            --color-neutral-200: #e5e5e5;
+            --color-neutral-300: #ffffff;
+            --color-neutral-800: #1a1a1a;
+            --color-dark: #131313;
+            --gap: 1.5rem;
+            --container-padding: 2rem;
+            --section-padding: 4rem;
+            --menu-padding: 2em;
+            --size-container: 1200px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--color-neutral-300);
+            color: var(--color-dark);
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: 500;
+            line-height: 1;
+        }
+
+        /* Hide the checkbox */
+        #menu-toggle {
+            display: none;
+        }
+
+        /* Header */
+        .header {
+            z-index: 110;
+            padding-top: var(--gap);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+        }
+
+        .container {
+            max-width: var(--size-container);
+            padding: 0 var(--container-padding);
+            width: 100%;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .container.is--full {
+            max-width: 100%;
+        }
+
+        .nav-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .logo {
+            font-family: 'PP Neue Corp Tight', Arial, sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-dark);
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+
+        .menu-button {
+            background: transparent;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+            cursor: pointer;
+            padding: 1em;
+            margin: -1em;
+        }
+
+        .menu-button-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            height: 1.125em;
+            overflow: hidden;
+        }
+
+        .menu-button-text p {
+            font-size: 1.125em;
+            font-family: Arial, Helvetica;
+            margin: 0;
+            transition: transform 0.3s ease;
+        }
+
+        .menu-button-icon {
+            width: 1em;
+            height: 1em;
+            transition: transform 0.4s cubic-bezier(0.65, 0.05, 0, 1);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: var(--section-padding) var(--container-padding);
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            display: flex;
+            position: relative;
+        }
+
+        .hero-section {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            gap: 2rem;
+        }
+
+        .hero-title {
+            font-family: 'PP Neue Corp Tight', Arial, sans-serif;
+            font-size: clamp(3rem, 8vw, 8rem);
+            font-weight: 700;
+            line-height: 0.9;
+            text-transform: uppercase;
+            color: var(--color-dark);
+            margin-bottom: 1rem;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.125rem, 2vw, 1.5rem);
+            color: var(--color-neutral-800);
+            max-width: 600px;
+            margin-bottom: 2rem;
+            line-height: 1.4;
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 2rem;
+            background: var(--color-primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .hero-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 107, 53, 0.3);
+        }
+
+        /* CSS-Only Sidebar Navigation */
+        .nav {
+            z-index: 100;
+            width: 100%;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .overlay {
+            background-color: rgba(19, 19, 19, 0.4);
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .menu {
+            padding: calc(3 * var(--menu-padding)) var(--menu-padding) var(--menu-padding) 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+            width: 35em;
+            height: 100%;
+            margin-left: auto;
+            position: relative;
+            transform: translateX(100%);
+            transition: transform 0.7s cubic-bezier(0.65, 0.05, 0, 1);
+        }
+
+        .menu-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        .menu-inner {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+            height: 100%;
+            gap: 5em;
+            position: relative;
+            z-index: 1;
+        }
+
+        .bg-panel {
+            background-color: #ffffff;
+            border-top-left-radius: 1.25em;
+            border-bottom-left-radius: 1.25em;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            transform: translateX(100%);
+            transition: transform 0.6s cubic-bezier(0.65, 0.05, 0, 1);
+        }
+
+        .bg-panel.first {
+            background-color: #ff6b35;
+            transition-delay: 0s;
+        }
+
+        .bg-panel.second {
+            background-color: #f5f5f5;
+            transition-delay: 0.1s;
+        }
+
+        .bg-panel:nth-child(3) {
+            background-color: #ffffff;
+            transition-delay: 0.2s;
+        }
+
+        .menu-list {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            list-style: none;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.6s ease 0.4s;
+        }
+
+        .menu-list-item {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-link {
+            padding: 0.75em var(--menu-padding);
+            display: flex;
+            gap: 0.75em;
+            width: 100%;
+            text-decoration: none;
+            position: relative;
+        }
+
+        .menu-link-heading {
+            text-transform: uppercase;
+            font-family: 'PP Neue Corp Tight', Arial, sans-serif;
+            font-size: 5.625em;
+            font-weight: 700;
+            line-height: 0.75;
+            position: relative;
+            color: #131313;
+            text-shadow: 0px 1em 0px #e5e5e5;
+            transition: all 0.55s cubic-bezier(0.65, 0.05, 0, 1);
+            z-index: 2;
+        }
+
+        .eyebrow {
+            color: #ff6b35;
+            text-transform: uppercase;
+            font-family: Arial, sans-serif;
+            font-weight: 400;
+            z-index: 2;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .menu-link-bg {
+            background-color: #1a1a1a;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            transform: scaleY(0);
+            transform-origin: bottom;
+            transition: transform 0.55s cubic-bezier(0.65, 0.05, 0, 1);
+            z-index: 1;
+        }
+
+        /* Fixed hover states - text becomes white on dark background */
+        .menu-link:hover .menu-link-bg {
+            transform: scaleY(1);
+        }
+
+        .menu-link:hover .menu-link-heading {
+            color: #ffffff !important; /* White text on hover */
+            transform: translateY(-1em);
+            transition-delay: 0.1s;
+        }
+
+        .menu-link:hover .eyebrow {
+            color: #ff6b35; /* Keep orange eyebrow */
+        }
+
+        .menu-details {
+            padding-left: var(--menu-padding);
+            display: flex;
+            flex-direction: column;
+            gap: 1.25em;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.6s ease 0.5s;
+        }
+
+        .p-small {
+            font-size: 0.875em;
+            color: #131313;
+        }
+
+        .socials-row {
+            display: flex;
+            gap: 1.5em;
+        }
+
+        .p-large {
+            font-size: 1.125em;
+            color: #131313;
+        }
+
+        .text-link {
+            text-decoration: none;
+            position: relative;
+            color: #131313;
+            transition: color 0.3s ease;
+        }
+
+        .text-link::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 1px;
+            background: #ff6b35;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s ease;
+        }
+
+        .text-link:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        /* Menu Toggle States */
+        #menu-toggle:checked ~ .nav {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        #menu-toggle:checked ~ .nav .overlay {
+            opacity: 1;
+        }
+
+        #menu-toggle:checked ~ .nav .menu {
+            transform: translateX(0);
+        }
+
+        #menu-toggle:checked ~ .nav .bg-panel {
+            transform: translateX(0);
+        }
+
+        #menu-toggle:checked ~ .nav .menu-list {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #menu-toggle:checked ~ .nav .menu-details {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #menu-toggle:checked ~ .header .menu-button-text p:first-child {
+            transform: translateY(-100%);
+        }
+
+        #menu-toggle:checked ~ .header .menu-button-text p:last-child {
+            transform: translateY(-100%);
+        }
+
+        #menu-toggle:checked ~ .header .menu-button-icon {
+            transform: rotate(315deg);
+        }
+
+        /* Responsive */
+        @media screen and (max-width: 767px) {
+            :root {
+                --menu-padding: 1em;
+            }
+
+            .menu {
+                width: 100%;
+            }
+
+            .bg-panel {
+                border-radius: 0;
+            }
+
+            .menu-link-heading {
+                font-size: 4em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hidden checkbox for toggle -->
+    <input type="checkbox" id="menu-toggle">
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container is--full">
+            <nav class="nav-row">
+                <a href="#" class="logo">Portfolio</a>
+                <label for="menu-toggle" class="menu-button">
+                    <div class="menu-button-text">
+                        <p>Menu</p>
+                        <p>Close</p>
+                    </div>
+                    <div class="menu-button-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 16 16" fill="none">
+                            <path d="M7.33333 16L7.33333 -3.2055e-07L8.66667 -3.78832e-07L8.66667 16L7.33333 16Z" fill="currentColor"></path>
+                            <path d="M16 8.66667L-2.62269e-07 8.66667L-3.78832e-07 7.33333L16 7.33333L16 8.66667Z" fill="currentColor"></path>
+                        </svg>
+                    </div>
+                </label>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <section class="main-content">
+        <div class="container">
+            <div class="hero-section">
+                <h1 class="hero-title">Creative<br>Portfolio</h1>
+                <p class="hero-subtitle">
+                    Crafting digital experiences that inspire and engage. 
+                    Discover our passion for innovative design and development.
+                </p>
+                <a href="#" class="hero-cta">
+                    View Our Work
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M4.16699 10H15.8337" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M10.833 15L15.833 10L10.833 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CSS-Only Sidebar Navigation -->
+    <div class="nav">
+        <label for="menu-toggle" class="overlay"></label>
+        <nav class="menu">
+            <div class="menu-bg">
+                <div class="bg-panel first"></div>
+                <div class="bg-panel second"></div>
+                <div class="bg-panel"></div>
+            </div>
+            <div class="menu-inner">
+                <ul class="menu-list">
+                    <li class="menu-list-item">
+                        <a href="#" class="menu-link">
+                            <p class="menu-link-heading">About us</p>
+                            <p class="eyebrow">01</p>
+                            <div class="menu-link-bg"></div>
+                        </a>
+                    </li>
+                    <li class="menu-list-item">
+                        <a href="#" class="menu-link">
+                            <p class="menu-link-heading">Our work</p>
+                            <p class="eyebrow">02</p>
+                            <div class="menu-link-bg"></div>
+                        </a>
+                    </li>
+                    <li class="menu-list-item">
+                        <a href="#" class="menu-link">
+                            <p class="menu-link-heading">Services</p>
+                            <p class="eyebrow">03</p>
+                            <div class="menu-link-bg"></div>
+                        </a>
+                    </li>
+                    <li class="menu-list-item">
+                        <a href="#" class="menu-link">
+                            <p class="menu-link-heading">Blog</p>
+                            <p class="eyebrow">04</p>
+                            <div class="menu-link-bg"></div>
+                        </a>
+                    </li>
+                    <li class="menu-list-item">
+                        <a href="#" class="menu-link">
+                            <p class="menu-link-heading">Contact us</p>
+                            <p class="eyebrow">05</p>
+                            <div class="menu-link-bg"></div>
+                        </a>
+                    </li>
+                </ul>
+                <div class="menu-details">
+                    <p class="p-small">Socials</p>
+                    <div class="socials-row">
+                        <a href="#" class="p-large text-link">Instagram</a>
+                        <a href="#" class="p-large text-link">LinkedIn</a>
+                        <a href="#" class="p-large text-link">X/Twitter</a>
+                        <a href="#" class="p-large text-link">Dribbble</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+</body>
+</html>

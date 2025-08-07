@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Symmetrical Card Gallery</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Boldonse&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+        :root {
+            /* Colors */
+            --color-primary: #0a0a0a;
+            --color-secondary: #161616;
+            --color-accent: #ff2c2c;
+            --color-text: #f5f5f5;
+            --color-text-muted: rgba(245, 245, 245, 0.7);
+            --color-border: rgba(255, 255, 255, 0.05);
+            --color-overlay: rgba(0, 0, 0, 0.5);
+            /* Typography */
+            --font-primary: "Inter", sans-serif;
+            --font-display: "Boldonse", serif;
+            --font-serif: "EB Garamond", serif;
+            --text-xs: 0.7rem;
+            --text-sm: 0.875rem;
+            --text-base: 1rem;
+            --text-lg: 1.2rem;
+            --text-xl: 1.5rem;
+            --text-2xl: 2rem;
+            --text-3xl: 3rem;
+            --text-mega: clamp(7rem, 15vw, 12rem);
+            /* Spacing */
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-5: 1.5rem;
+            --space-6: 2rem;
+            --space-8: 3rem;
+            --space-10: 4rem;
+            --space-12: 6rem;
+            /* Layout */
+            --menu-width: 250px;
+            --menu-collapsed-width: 60px;
+            --panel-padding: 5%;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: var(--font-primary);
+            background: var(--color-primary);
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+        /* Enhanced Creative Gallery */
+        .gallery-section {
+            background: radial-gradient(ellipse at center, var(--color-secondary) 0%, var(--color-primary) 70%);
+            padding: var(--space-12) var(--panel-padding);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            border-top: 1px solid var(--color-border);
+            border-bottom: 1px solid var(--color-border);
+            overflow: hidden;
+        }
+        /* Animated background elements */
+        .gallery-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 44, 44, 0.03) 0%, transparent 70%);
+            animation: rotate 30s linear infinite;
+            z-index: 1;
+        }
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .gallery-title {
+            margin-bottom: var(--space-12);
+            text-align: center;
+            z-index: 10;
+            position: relative;
+        }
+        .gallery-title h2 {
+            font-family: var(--font-display);
+            font-size: var(--text-3xl);
+            margin-bottom: var(--space-4);
+            background: linear-gradient(135deg, var(--color-text) 0%, var(--color-accent) 50%, var(--color-text) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 3s ease-in-out infinite;
+        }
+        @keyframes shimmer {
+            0%, 100% { background-position: -200% 0; }
+            50% { background-position: 200% 0; }
+        }
+        .gallery-title p {
+            font-family: var(--font-serif);
+            font-size: var(--text-base);
+            color: var(--color-text-muted);
+            font-style: italic;
+        }
+        .gallery-container {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+        }
+        .gallery-track {
+            position: relative;
+            width: 500px;
+            height: 600px;
+            perspective: 1500px;
+        }
+        .gallery-card {
+            position: absolute;
+            width: 300px;
+            height: 450px;
+            border-radius: 20px;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            cursor: pointer;
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            overflow: hidden;
+        }
+        
+        /* Symmetrical card positioning with equal spacing */
+        .gallery-card.far-left {
+            left: -300px; /* Equal spacing from left */
+            top: 100px;
+            transform: scale(0.6) rotateY(60deg) rotateX(10deg);
+            opacity: 0.3;
+            z-index: 1;
+            filter: blur(2px);
+        }
+        .gallery-card.left {
+            left: -150px; /* Equal spacing from center */
+            top: 50px;
+            transform: scale(0.75) rotateY(35deg) rotateX(5deg);
+            opacity: 0.6;
+            z-index: 2;
+            filter: blur(1px);
+        }
+        .gallery-card.active {
+            left: 100px; /* Center position */
+            top: 0;
+            transform: scale(1) rotateY(0deg) rotateX(0deg);
+            opacity: 1;
+            z-index: 5;
+            box-shadow: 
+                0 40px 120px rgba(0, 0, 0, 0.8),
+                0 0 0 1px rgba(255, 44, 44, 0.2),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+            filter: blur(0px);
+        }
+        .gallery-card.right {
+            left: 350px; /* Equal spacing from center */
+            top: 50px;
+            transform: scale(0.75) rotateY(-35deg) rotateX(5deg);
+            opacity: 0.6;
+            z-index: 2;
+            filter: blur(1px);
+        }
+        .gallery-card.far-right {
+            left: 500px; /* Equal spacing from right */
+            top: 100px;
+            transform: scale(0.6) rotateY(-60deg) rotateX(10deg);
+            opacity: 0.3;
+            z-index: 1;
+            filter: blur(2px);
+        }
+        .gallery-card.hidden {
+            opacity: 0;
+            transform: scale(0.3);
+            z-index: 0;
+        }
+        
+        /* Enhanced card content with parallax effect */
+        .card-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+            padding: var(--space-8) var(--space-6);
+            border-radius: 0 0 20px 20px;
+            transform: translateY(100%);
+            transition: all 0.4s ease;
+        }
+        .gallery-card.active .card-content {
+            transform: translateY(0);
+        }
+        .card-content h3 {
+            font-family: var(--font-display);
+            font-size: var(--text-xl);
+            margin-bottom: var(--space-2);
+            color: var(--color-text);
+        }
+        .card-content p {
+            font-size: var(--text-sm);
+            color: var(--color-text-muted);
+            margin-bottom: var(--space-3);
+        }
+        .card-content .card-meta {
+            display: flex;
+            gap: var(--space-4);
+            font-size: var(--text-xs);
+            color: var(--color-accent);
+        }
+        /* Enhanced Navigation with floating design */
+        .gallery-controls {
+            margin-top: var(--space-12);
+            display: flex;
+            gap: var(--space-8);
+            z-index: 10;
+            position: relative;
+        }
+        .gallery-btn {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--color-text);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+            font-size: var(--text-lg);
+            position: relative;
+            overflow: hidden;
+        }
+        .gallery-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--color-accent), transparent, var(--color-accent));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .gallery-btn:hover {
+            background: linear-gradient(135deg, rgba(255, 44, 44, 0.2), rgba(255, 44, 44, 0.1));
+            border-color: var(--color-accent);
+            transform: translateY(-3px) scale(1.1);
+            box-shadow: 0 15px 30px rgba(255, 44, 44, 0.3);
+        }
+        .gallery-btn:hover::before {
+            opacity: 0.1;
+        }
+        .gallery-btn:active {
+            transform: translateY(-1px) scale(1.05);
+        }
+        /* Progress indicator */
+        .gallery-progress {
+            margin-top: var(--space-6);
+            display: flex;
+            gap: var(--space-2);
+            z-index: 10;
+        }
+        .progress-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .progress-dot.active {
+            background: var(--color-accent);
+            transform: scale(1.5);
+        }
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .gallery-track {
+                width: 350px;
+                height: 450px;
+            }
+            .gallery-card {
+                width: 220px;
+                height: 330px;
+            }
+            .gallery-card.far-left,
+            .gallery-card.far-right {
+                display: none;
+            }
+            .gallery-card.left {
+                left: -110px;
+                top: 60px;
+            }
+            .gallery-card.active {
+                left: 65px;
+            }
+            .gallery-card.right {
+                left: 240px;
+                top: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="gallery-section">
+        <div class="gallery-title">
+            <h2>Featured Works</h2>
+            <p>Navigate through our carefully curated selection</p>
+        </div>
+        <div class="gallery-container">
+            <div class="gallery-track">
+                <div class="gallery-card" style="background-image: url('https://assets.codepen.io/16327/portrait-number-05.png')">
+                    <div class="card-content">
+                        <h3>Experimental Art</h3>
+                        <p>Digital manipulation series</p>
+                        <div class="card-meta">
+                            <span>2024</span>
+                            <span>Digital Art</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-card" style="background-image: url('https://assets.codepen.io/16327/portrait-number-06.png')">
+                    <div class="card-content">
+                        <h3>Timeless Beauty</h3>
+                        <p>Classic portraiture collection</p>
+                        <div class="card-meta">
+                            <span>2024</span>
+                            <span>Photography</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-card" style="background-image: url('https://assets.codepen.io/16327/portrait-number-07.png')">
+                    <div class="card-content">
+                        <h3>Abstract Vision</h3>
+                        <p>Contemporary visual exploration</p>
+                        <div class="card-meta">
+                            <span>2024</span>
+                            <span>Mixed Media</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-card" style="background-image: url('https://assets.codepen.io/16327/portrait-number-01.png')">
+                    <div class="card-content">
+                        <h3>Modern Portrait</h3>
+                        <p>Contemporary human expressions</p>
+                        <div class="card-meta">
+                            <span>2024</span>
+                            <span>Portrait</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-card" style="background-image: url('https://assets.codepen.io/16327/portrait-number-02.png')">
+                    <div class="card-content">
+                        <h3>Urban Stories</h3>
+                        <p>Street photography narrative</p>
+                        <div class="card-meta">
+                            <span>2024</span>
+                            <span>Street</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-card" style="background-image: url('https://assets.codepen.io/16327/portrait-number-03.png')">
+                    <div class="card-content">
+                        <h3>Natural Forms</h3>
+                        <p>Organic shapes and textures</p>
+                        <div class="card-meta">
+                            <span>2024</span>
+                            <span>Nature</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-card" style="background-image: url('https://assets.codepen.io/16327/portrait-number-04.png')">
+                    <div class="card-content">
+                        <h3>Intimate Moments</h3>
+                        <p>Personal documentary series</p>
+                        <div class="card-meta">
+                            <span>2024</span>
+                            <span>Documentary</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="gallery-controls">
+            <button class="gallery-btn" id="prevBtn">‹</button>
+            <button class="gallery-btn" id="nextBtn">›</button>
+        </div>
+        <div class="gallery-progress" id="progressDots"></div>
+    </section>
+    <script>
+        class CreativeGallery {
+            constructor() {
+                this.cards = document.querySelectorAll('.gallery-card');
+                this.currentIndex = 3; // Start with middle card
+                this.totalCards = this.cards.length;
+                this.init();
+            }
+            init() {
+                this.createProgressDots();
+                this.updateCards();
+                this.bindEvents();
+            }
+            createProgressDots() {
+                const progressContainer = document.getElementById('progressDots');
+                for (let i = 0; i < this.totalCards; i++) {
+                    const dot = document.createElement('div');
+                    dot.className = 'progress-dot';
+                    dot.addEventListener('click', () => this.goToCard(i));
+                    progressContainer.appendChild(dot);
+                }
+            }
+            bindEvents() {
+                document.getElementById('prevBtn').addEventListener('click', () => this.prev());
+                document.getElementById('nextBtn').addEventListener('click', () => this.next());
+                // Card click navigation
+                this.cards.forEach((card, index) => {
+                    card.addEventListener('click', () => {
+                        if (index !== this.currentIndex) {
+                            this.goToCard(index);
+                        }
+                    });
+                });
+                // Keyboard navigation
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowLeft') this.prev();
+                    if (e.key === 'ArrowRight') this.next();
+                });
+            }
+            updateCards() {
+                this.cards.forEach((card, index) => {
+                    // Remove all classes
+                    card.classList.remove('far-left', 'left', 'active', 'right', 'far-right', 'hidden');
+                    // Calculate relative position
+                    const relativeIndex = (index - this.currentIndex + this.totalCards) % this.totalCards;
+                    if (relativeIndex === this.totalCards - 2 || (relativeIndex > 2 && relativeIndex < this.totalCards - 2)) {
+                        card.classList.add('far-left');
+                    } else if (relativeIndex === this.totalCards - 1) {
+                        card.classList.add('left');
+                    } else if (relativeIndex === 0) {
+                        card.classList.add('active');
+                    } else if (relativeIndex === 1) {
+                        card.classList.add('right');
+                    } else if (relativeIndex === 2) {
+                        card.classList.add('far-right');
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+                // Update progress dots
+                document.querySelectorAll('.progress-dot').forEach((dot, index) => {
+                    dot.classList.toggle('active', index === this.currentIndex);
+                });
+            }
+            next() {
+                this.currentIndex = (this.currentIndex + 1) % this.totalCards;
+                this.updateCards();
+            }
+            prev() {
+                this.currentIndex = (this.currentIndex - 1 + this.totalCards) % this.totalCards;
+                this.updateCards();
+            }
+            goToCard(index) {
+                this.currentIndex = index;
+                this.updateCards();
+            }
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            new CreativeGallery();
+        });
+    </script>
+</body>
+</html>

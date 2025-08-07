@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Working Infinite Scroll</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/Observer.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, sans-serif;
+      color: #1a1a1a;
+      background: #f8fafc;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+
+    .wrapper {
+      position: relative;
+      width: min(500px, 90vw);
+      height: 60vh;
+      overflow: hidden;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+    }
+
+    .wrapper::before,
+    .wrapper::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 50px;
+      background: linear-gradient(var(--dir, to bottom), #f8fafc, transparent);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .wrapper::before {
+      top: 0;
+      --dir: to bottom;
+    }
+
+    .wrapper::after {
+      bottom: 0;
+      --dir: to top;
+    }
+
+    .container {
+      width: 100%;
+      cursor: grab;
+      padding: 1rem;
+    }
+
+    .container:active {
+      cursor: grabbing;
+    }
+
+    .item {
+      background: white;
+      border: 1px solid #e2e8f0;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      border-radius: 6px;
+      user-select: none;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .item-title {
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+      color: #0f172a;
+    }
+
+    .item-subtitle {
+      font-size: 0.875rem;
+      color: #64748b;
+    }
+
+    .instructions {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: white;
+      padding: 10px 15px;
+      border-radius: 6px;
+      border: 1px solid #e2e8f0;
+      font-size: 0.75rem;
+      color: #64748b;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+  <div class="instructions">
+    Try scrolling with mouse wheel or dragging
+  </div>
+
+  <div class="wrapper">
+    <div class="container">
+      <div class="item">
+        <div class="item-title">Project Alpha</div>
+        <div class="item-subtitle">Strategic planning and development</div>
+      </div>
+      <div class="item">
+        <div class="item-title">User Research</div>
+        <div class="item-subtitle">Customer experience analysis</div>
+      </div>
+      <div class="item">
+        <div class="item-title">Design System</div>
+        <div class="item-subtitle">Component library creation</div>
+      </div>
+      <div class="item">
+        <div class="item-title">Mobile App</div>
+        <div class="item-subtitle">iOS and Android development</div>
+      </div>
+      <div class="item">
+        <div class="item-title">Security Audit</div>
+        <div class="item-subtitle">Infrastructure assessment</div>
+      </div>
+      <div class="item">
+        <div class="item-title">Performance</div>
+        <div class="item-subtitle">Speed optimization</div>
+      </div>
+      <div class="item">
+        <div class="item-title">Analytics</div>
+        <div class="item-subtitle">Data tracking implementation</div>
+      </div>
+      <div class="item">
+        <div class="item-title">Content Strategy</div>
+        <div class="item-subtitle">Editorial planning</div>
+      </div>
+      <div class="item">
+        <div class="item-title">Team Training</div>
+        <div class="item-subtitle">Skill development program</div>
+      </div>
+      <div class="item">
+        <div class="item-title">Launch Campaign</div>
+        <div class="item-subtitle">Marketing and promotion</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    window.addEventListener('load', function() {
+      console.log('Page loaded');
+      
+      // Check if GSAP loaded
+      if (typeof gsap === 'undefined') {
+        console.error('GSAP not loaded');
+        document.querySelector('.instructions').textContent = 'Error: GSAP library failed to load';
+        return;
+      }
+      
+      if (typeof Observer === 'undefined') {
+        console.error('GSAP Observer not loaded');
+        document.querySelector('.instructions').textContent = 'Error: GSAP Observer failed to load';
+        return;
+      }
+
+      console.log('GSAP loaded successfully');
+
+      const container = document.querySelector(".container");
+      const items = Array.from(container.children);
+      
+      console.log('Found', items.length, 'items');
+
+      // Simple wrap function
+      function wrapY(value, min, max) {
+        const range = max - min;
+        return ((((value - min) % range) + range) % range) + min;
+      }
+
+      // Calculate wrap bounds
+      const containerHeight = container.offsetHeight;
+      const wrapperHeight = document.querySelector('.wrapper').offsetHeight;
+      const totalHeight = containerHeight;
+      const visibleHeight = wrapperHeight;
+      
+      const minY = -(totalHeight - visibleHeight);
+      const maxY = 0;
+
+      console.log('Wrap bounds:', minY, 'to', maxY);
+
+      Observer.create({
+        target: container,
+        type: "wheel,touch,pointer",
+        preventDefault: true,
+        
+        onPress: function() {
+          console.log('Press detected');
+          container.style.cursor = "grabbing";
+        },
+        
+        onRelease: function() {
+          console.log('Release detected');
+          container.style.cursor = "grab";
+        },
+        
+        onChange: function({ deltaY, isDragging, event }) {
+          console.log('Change detected:', deltaY, isDragging, event.type);
+          
+          const multiplier = isDragging ? 2 : 5;
+          const direction = event.type === "wheel" ? -1 : 1;
+          const movement = deltaY * direction * multiplier;
+
+          items.forEach((item, i) => {
+            const currentY = gsap.getProperty(item, "y") || 0;
+            const newY = wrapY(currentY + movement, minY, maxY);
+            
+            gsap.set(item, { y: newY });
+          });
+        }
+      });
+
+      console.log('Observer created successfully');
+      document.querySelector('.instructions').textContent = 'Animation ready! Try scrolling or dragging';
+    });
+  </script>
+</body>
+</html>
